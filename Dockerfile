@@ -2,10 +2,10 @@
 FROM node:20
 
 # Establece el directorio de trabajo en la carpeta del proyecto
-WORKDIR /usr/src/fast-delivery-front
+WORKDIR /fast-delivery-front
 
 # Copia los archivos de configuración del proyecto
-COPY package*.json ./
+COPY package.json ./
 
 # Instala las dependencias del proyecto
 RUN npm install
@@ -14,7 +14,7 @@ RUN npm install
 COPY . .
 
 # Compila y construye la aplicación (ajusta según tus necesidades específicas)
-RUN npm run build
+RUN npm install
 
 # Expone el puerto 3001 para acceder a la aplicación
 EXPOSE 3001
