@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "nodemon server.js"
+    "build": "nodemon server.js",
+    "release": "standard-version"
   },
   "repository": {
     "type": "git",
@@ -20,6 +21,7 @@
   "homepage": "https://github.com/hernan789/fast-Delivery-Back#readme",
   "devDependencies": {
     "nodemon": "^3.0.2",
+    "standard-version": "^9.5.0",
     "typescript": "^5.3.3"
   },
   "dependencies": {
