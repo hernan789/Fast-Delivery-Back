@@ -5,12 +5,12 @@
   "main": "index.js",
   "husky": {
     "hooks": {
-      "pre-commit": "npm run lint"
+      "pre-commit": "lint-staged"
     }
   },
   "lint-staged": {
     "*.{js,jsx}": [
-      "eslint --fix"
+      "eslint"
     ]
   },
   "scripts": {
