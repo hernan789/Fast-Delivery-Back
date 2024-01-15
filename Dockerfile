@@ -2,7 +2,7 @@
 FROM node:20
 
 # Establece el directorio de trabajo en la carpeta del proyecto
-WORKDIR /fast-delivery-front
+WORKDIR /fast-delivery-back
 
 # Copia los archivos de configuración del proyecto
 COPY package.json ./
