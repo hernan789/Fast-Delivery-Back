@@ -3,10 +3,21 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{js,jsx}": [
+      "eslint --fix"
+    ]
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "nodemon server.js",
-    "release": "standard-version"
+    "release": "standard-version",
+    "lint": "eslint ."
   },
   "repository": {
     "type": "git",
@@ -20,6 +31,9 @@
   },
   "homepage": "https://github.com/hernan789/fast-Delivery-Back#readme",
   "devDependencies": {
+    "eslint": "^8.56.0",
+    "husky": "^8.0.3",
+    "lint-staged": "^15.2.0",
     "nodemon": "^3.0.2",
     "standard-version": "^9.5.0",
     "typescript": "^5.3.3"
