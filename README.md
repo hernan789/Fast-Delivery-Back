@@ -50,13 +50,8 @@ Este proyecto está bajo la Licencia MIT.
 
 ## Créditos
 
-- Autor: Tu Nombre
-- Basado en: Proyecto XYZ (enlace al repositorio)
-
-## Contacto
-
-Para preguntas o problemas, contáctenos en [correo electrónico].
+- Autores: Dario Andrada, Hernan Duarte, Valentin Guardia, Luis Robledo
 
 ## Estado del Proyecto
 
-Actualmente en desarrollo activo. Versión 1.0 lanzada el [fecha].
+Actualmente en desarrollo activo. Versión 1.0.0 lanzada el [2024-01-12].
