@@ -17,7 +17,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "nodemon server.js",
     "release": "standard-version",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "precommit": "lint-staged"
   },
   "repository": {
     "type": "git",
