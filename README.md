@@ -38,6 +38,8 @@ Fast Delivery es un sistema desarrollado en Next.js con TypeScript, diseñado pa
 - nodemon: Monitor de cambios en el código para reiniciar automáticamente la aplicación.
 - standard-version: Automatiza la versión y la generación de registros de cambios.
 - typescript: Lenguaje de programación que añade tipado estático a JavaScript.
+- docker: Herramienta para la creación y ejecución de contenedores.
+- docker-compose: Herramienta para definir y ejecutar aplicaciones Docker multi-contenedor.
 
 ## Contribución
 
@@ -49,7 +51,7 @@ Este proyecto está bajo la Licencia MIT.
 
 ## Créditos
 
-- Autores: Dario Andrada, Hernan Duarte, Valentin Guardia, Luis Robledo
+- Autores: Dario Andrada, Hernán Duarte, Valentin Guardia y Luis Robledo.
 
 ## Estado del Proyecto
 
