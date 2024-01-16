@@ -14,7 +14,6 @@ Fast Delivery es un sistema desarrollado en Next.js con TypeScript, diseñado pa
 
 1. Configure las opciones de entrega en el archivo de configuración.
 2. Ejecute la aplicación: `npm start`
-3. Acceda a la interfaz de administración en `http://localhost:3000/admin`
 
 ## Estructura del Proyecto
 
@@ -25,6 +24,12 @@ Fast Delivery es un sistema desarrollado en Next.js con TypeScript, diseñado pa
 - `/routes`: Definición de las rutas de la aplicación.
 - `/utils`: Utilidades y funciones auxiliares.
 
+## Dependencias Principales
+
+- cors: Middleware que permite o bloquea solicitudes HTTP en función de la configuración.
+- express: Marco de aplicación web para Node.js.
+- morgan: Middleware de registro de solicitudes HTTP para Express.
+
 ## Dependencias de desarrollo
 
 - eslint: Herramienta de linting para mantener un código consistente.
@@ -33,12 +38,6 @@ Fast Delivery es un sistema desarrollado en Next.js con TypeScript, diseñado pa
 - nodemon: Monitor de cambios en el código para reiniciar automáticamente la aplicación.
 - standard-version: Automatiza la versión y la generación de registros de cambios.
 - typescript: Lenguaje de programación que añade tipado estático a JavaScript.
-
-## Dependencias de desarrollo
-
-- cors: Middleware que permite o bloquea solicitudes HTTP en función de la configuración.
-- express: Marco de aplicación web para Node.js.
-- morgan: Middleware de registro de solicitudes HTTP para Express.
 
 ## Contribución
 
