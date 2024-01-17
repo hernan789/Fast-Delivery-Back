@@ -10,14 +10,14 @@ Fast Delivery es un sistema desarrollado en Next.js con TypeScript, diseñado pa
 2. Acceda al directorio del proyecto: `cd fast-delivery`
 3. Instale las dependencias: `npm install`
 
-## Cómo Utilizar
+## Cómo levantar el proyecto
 
 1. Configure las opciones de entrega en el archivo de configuración.
 2. Ejecute la aplicación: `npm start`
 
 ## Estructura del Proyecto
 
-- `/.husky`: Configuración de Husky para ganchos de Git.
+- `/.husky`: Configuración de Husky para hooks de Git.
 - `/controllers`: Controladores que manejan la lógica de negocio.
 - `/middlewares`: Middlewares utilizados en la aplicación.
 - `/models`: Modelos de datos de la aplicación.
@@ -33,7 +33,7 @@ Fast Delivery es un sistema desarrollado en Next.js con TypeScript, diseñado pa
 ## Dependencias de desarrollo
 
 - eslint: Herramienta de linting para mantener un código consistente.
-- husky: Utilizado para configurar ganchos de Git.
+- husky: Utilizado para configurar hooks de Git.
 - lint-staged: Ejecuta scripts en archivos staged durante el proceso de commit.
 - nodemon: Monitor de cambios en el código para reiniciar automáticamente la aplicación.
 - standard-version: Automatiza la versión y la generación de registros de cambios.
@@ -43,7 +43,7 @@ Fast Delivery es un sistema desarrollado en Next.js con TypeScript, diseñado pa
 
 ## Contribución
 
-¡Contribuciones son bienvenidas! Por favor, lea nuestras pautas de contribución antes de comenzar.
+¡Contribuciones son bienvenidas!
 
 ## Licencia
 
