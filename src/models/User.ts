@@ -2,7 +2,6 @@ import S from "sequelize";
 
 import db from "../config/index";
 interface Users {
-  id: number;
   name: string;
   surname: string;
   email: string;
@@ -14,10 +13,6 @@ class User extends S.Model<Users> {}
 
 User.init(
   {
-    id: {
-      type: S.NUMBER,
-      allowNull: false,
-    },
     name: {
       type: S.STRING,
       allowNull: false,
