@@ -1,17 +1,21 @@
-import express, { Application, Request, Response } from "express";
+import express, { Application, Request, Response, NextFunction } from "express";
+import db from "../fast-Delivery-Back/src/config/index";
+import router from "./src/routes"
 const app: Application = express();
-
 const morgan = require("morgan");
 const cors = require("cors");
-import db from "../fast-Delivery-Back/src/config/index";
 const PORT = 3001;
+const corsOrigin = process.env.CORS_ORIGIN || "http://localhost:3000";
+// const serverHost = process.env.SERVER_HOST || "http://localhost:3001";
+// const serverPort = process.env.SERVER_PORT || 3001;
 
 app.use(express.json());
 app.use(morgan("dev"));
-app.use(cors());
-
-app.get("/", async (req: Request, res: Response): Promise<Response> => {
-  return res.status(200).send("GRUPO 3");
+app.use(cors({ origin: corsOrigin, credentials: true }));
+app.use("/", router);
+app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
+  console.error(err);
+  res.status(500).send(err.message);
 });
 
 db.sync({ force: false })

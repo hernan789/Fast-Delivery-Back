@@ -1,22 +1,23 @@
 import S from "sequelize";
 
 import db from "../config/index";
-interface Users {
+export interface Users {
   id: number;
   name: string;
   surname: string;
   email: string;
-  password: string;
+  password?: string;
   isAdmin: boolean;
-  salt: string;
+  salt?: string;
 }
 class User extends S.Model<Users> {}
 
 User.init(
   {
     id: {
-      type: S.NUMBER,
+      type: S.INTEGER,
       allowNull: false,
+      primaryKey : true
     },
     name: {
       type: S.STRING,
@@ -29,6 +30,7 @@ User.init(
     email: {
       type: S.STRING,
       allowNull: false,
+      unique: true,
     },
     password: {
       type: S.STRING,
