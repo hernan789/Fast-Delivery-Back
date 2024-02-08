@@ -3,15 +3,22 @@ const bcrypt = require("bcrypt");
 import db from "../config/index";
 import { Hooks } from "sequelize/lib/hooks";
 
-interface Users {
+// interface Users {
+//   name: string;
+//   surname: string;
+//   email: string;
+//   password?: string;
+//   isAdmin: boolean;
+//   salt?: string;
+// }
+class User extends S.Model {
+
   name: string;
   surname: string;
   email: string;
-  password: string;
+  password?: string;
   isAdmin: boolean;
   salt?: string;
-}
-class User extends S.Model<Users> {
 
   public hash(password: string, salt: string): Promise<string> {
     return bcrypt.hash(password, salt);
@@ -37,6 +44,7 @@ User.init(
     email: {
       type: S.STRING,
       allowNull: false,
+      unique: true,
     },
     password: {
       type: S.STRING,
