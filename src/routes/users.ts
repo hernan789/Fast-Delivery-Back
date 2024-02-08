@@ -1,7 +1,6 @@
 import { Request, Response, Router } from "express";
 const usersRouter = Router();
 import User from "../models/User";
-import bcrypt from "bcrypt";
 import { generateToken } from "../config/token";
 import auth from "../middlewares/auth";
 
@@ -25,15 +24,12 @@ usersRouter.post(
       const { name, surname, email, password, isAdmin }: CreateUserRequestBody =
         req.body;
 
-      // Verificar si el correo electrónico ya está registrado
       const existingUser = await User.findOne({ where: { email } });
       if (existingUser) {
         return res
           .status(400)
           .json({ error: "El correo electrónico ya está registrado." });
       }
-
-      // Crear un nuevo usuario
       const newUser = await User.create({
         name,
         surname,
@@ -65,12 +61,10 @@ usersRouter.post(
       if (!existingUser) {
         return res.status(400).json({ error: "Usuario no encontrado." });
       }
+      
+    const isOk = await existingUser.validatePassword(password);
+    if (!isOk) return res.sendStatus(401);
 
-      console.log(existingUser)
-      const isValid = await bcrypt.compare(password, existingUser.password);
-      if (!isValid) {
-        return res.status(400).json({ message: "Contraseña inválida." });
-      }
       const token = generateToken({
         name: existingUser.name,
         surname: existingUser.surname,
@@ -97,9 +91,6 @@ usersRouter.post(
     res.status(204).json({ message: "Deslogueado correctamente" });
   }
 );
-// usersRouter.get("/private", (req: Request, res: Response) => {
-//   res.status(200).json({ message: "Hello world" });
-// });
 
 
 
