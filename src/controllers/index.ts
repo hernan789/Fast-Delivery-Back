@@ -1,5 +1,5 @@
-import userController from "./userControllers";
+// import userController from "./userControllers";
 
-export default {
-  userController,
-}
+// export default {
+//   userController,
+// }

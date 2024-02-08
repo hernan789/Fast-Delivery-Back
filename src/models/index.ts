@@ -1,6 +1,5 @@
-import User, {Users} from "./User";
+import User from "./User";
 
 export{
   User,
-  Users,
 };

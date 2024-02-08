@@ -6,7 +6,9 @@
     "lib": ["es2023"],
     "module": "node16",
     "target": "es2022",
-
+    "allowImportingTsExtensions": true,//new
+    "emitDeclarationOnly": true,//new
+    "declaration": true,//new
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
