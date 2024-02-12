@@ -1,5 +1,7 @@
+import Package from "./Package";
 import User from "./User";
 
-export{
-  User,
-};
+User.hasMany(Package, {});
+Package.belongsTo(User, {});
+
+export { User, Package };
