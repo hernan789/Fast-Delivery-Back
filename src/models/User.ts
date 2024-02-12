@@ -1,7 +1,6 @@
 import S from "sequelize";
 const bcrypt = require("bcrypt");
 import db from "../config/index";
-import { Hooks } from "sequelize/lib/hooks";
 
 // interface Users {
 //   name: string;
@@ -16,9 +15,11 @@ class User extends S.Model {
   name: string;
   surname: string;
   email: string;
-  password?: string;
+  password: string;
   isAdmin: boolean;
-  salt?: string;
+  salt: string;
+  resetPasswordToken: string | null;
+  // resetPasswordExpires: Date | null;
 
   public hash(password: string, salt: string): Promise<string> {
     return bcrypt.hash(password, salt);
@@ -29,6 +30,8 @@ class User extends S.Model {
     const newHash = await this.hash(password, currentSalt);
     return newHash === this.getDataValue("password");
   }
+  
+  
 }
 
 User.init(
@@ -57,6 +60,14 @@ User.init(
     salt: {
       type: S.STRING,
     },
+    resetPasswordToken: {
+      type: S.STRING,
+      allowNull: true,
+    },
+    // resetPasswordExpires: {
+    //   type: S.DATE,
+    //   allowNull: true,
+    // },
   },
   { sequelize: db, modelName: "users" }
 );
@@ -74,3 +85,4 @@ User.addHook("beforeCreate", async (user:User) => {
 });
 
 export default User;
+

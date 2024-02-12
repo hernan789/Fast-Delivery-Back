@@ -22,7 +22,7 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 
-interface CustomRequest extends Request {
+export interface CustomRequest extends Request {
   user?: any; 
 }
 const auth = async (req: CustomRequest, res: Response, next: NextFunction) => {
