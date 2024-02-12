@@ -3,22 +3,14 @@ const bcrypt = require("bcrypt");
 import db from "../config/index";
 import { Hooks } from "sequelize/lib/hooks";
 
-// interface Users {
-//   name: string;
-//   surname: string;
-//   email: string;
-//   password?: string;
-//   isAdmin: boolean;
-//   salt?: string;
-// }
 class User extends S.Model {
-
   name: string;
   surname: string;
   email: string;
   password?: string;
   isAdmin: boolean;
   salt?: string;
+  picture: string;
 
   public hash(password: string, salt: string): Promise<string> {
     return bcrypt.hash(password, salt);
@@ -57,11 +49,14 @@ User.init(
     salt: {
       type: S.STRING,
     },
+    picture: {
+      type: S.STRING,
+    },
   },
   { sequelize: db, modelName: "users" }
 );
 
-User.addHook("beforeCreate", async (user:User) => {
+User.addHook("beforeCreate", async (user: User) => {
   const saltRounds = 10;
   try {
     const salt = await bcrypt.genSalt(saltRounds);
