@@ -54,9 +54,9 @@ Package.beforeCreate(async (packages) => {
   try {
     const trackId = `#${Math.floor(Math.random() * 10)}${String.fromCharCode(
       97 + Math.floor(Math.random() * 26)
-    )}${String.fromCharCode(97 + Math.floor(Math.random() * 26))}${Math.floor(
-      Math.random() * 100
-    )}${Math.floor(Math.random() * 100)} ${packages.weight} `;
+    )}${Math.floor(Math.random() * 100)}${Math.floor(Math.random() * 100)} ${
+      packages.weight
+    } `;
     packages.trackId = trackId;
   } catch (error) {
     throw new Error("ERROR");
