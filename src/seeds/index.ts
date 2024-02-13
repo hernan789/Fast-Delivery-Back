@@ -1,7 +1,7 @@
-// import db from '../config/index'; 
+// import db from '../config/index';
 // import { User } from '../models';
-// // import { Package } from '../models/Package'; 
-// import {users} from './seed'; 
+// // import { Package } from '../models/Package';
+// import {users} from './seed';
 // const bcrypt = require("bcrypt")
 
 // const seedData = async () => {
@@ -26,7 +26,7 @@
 //         email: user.email,
 //         password: hashedPassword,
 //         isAdmin: isAdmin,
-//         resetPasswordToken: null, 
+//         resetPasswordToken: null,
 //       });
 //     }
 
@@ -40,27 +40,29 @@
 // };
 // seedData();
 
-
-import db from '../config/index'; 
-import User from '../models/User'; 
-import { users } from './seed'; 
+import db from "../config/index";
+import { Package, User } from "../models";
+import { users, packages } from "./seed";
 
 const seedData = async () => {
   try {
     await db.authenticate();
-    console.log('Connection to database has been established successfully.');
+    console.log("Connection to database has been established successfully.");
     await db.sync({ force: true });
 
     for (const user of users) {
-      await User.create(user); 
+      await User.create(user);
+    }
+    for (const pkg of packages) {
+      await Package.create(pkg);
     }
 
-    console.log('Data seeding successful');
+    console.log("Data seeding successful");
   } catch (error) {
-    console.error('Error seeding data:', error);
+    console.error("Error seeding data:", error);
   } finally {
     await db.close();
-    console.log('Database connection closed.');
+    console.log("Database connection closed.");
   }
 };
 
