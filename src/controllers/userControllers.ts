@@ -2,9 +2,11 @@ import { Request, Response } from "express";
 import User from "../models/User";
 import { generateToken } from "../config/token";
 import { LoginRequestBody, CreateUserRequestBody } from "../types/userTypes";
+ import { CustomRequest } from "../middlewares/auth.ts";
 import validate from "../utils/validations";
 import { transporter } from "../config/mailTRansporter";
 import emailTemplates from "../utils/emailTemplates.ts";
+
 
 const userController = {
   register: async (req: Request, res: Response): Promise<Response> => {
@@ -84,27 +86,27 @@ const userController = {
     res.clearCookie("token");
     return res.status(204).json({ message: "Deslogueado correctamente" });
   },
-  me: async (req: any, res: Response): Promise<Response> => {
-    const useremail = req.user?.email;
-    if (!useremail) {
-      return res
-        .status(400)
-        .json({ message: "Email no encontrado en el token." });
-    }
-    try {
-      const user = await User.findOne({
-        where: { email: useremail },
-        attributes: ["name", "surname", "email", "isAdmin"],
-      });
-      if (!user) {
-        return res.status(404).json({ message: "Usuario no encontrado." });
-      }
-      return res.json(user.get({ plain: true }));
-    } catch (error) {
-      console.error(error);
-      return res.status(500).send("Error de servidor");
-    }
-  },
+  // me: async (req: CustomRequest, res: Response): Promise<Response> => {
+  //   const useremail = req.user?.email;
+  //   if (!useremail) {
+  //     return res
+  //       .status(400)
+  //       .json({ message: "Email no encontrado en el token." });
+  //   }
+  //   try {
+  //     const user = await User.findOne({
+  //       where: { email: useremail },
+  //       attributes: ["name", "surname", "email", "isAdmin"],
+  //     });
+  //     if (!user) {
+  //       return res.status(404).json({ message: "Usuario no encontrado." });
+  //     }
+  //     return res.json(user.get({ plain: true }));
+  //   } catch (error) {
+  //     console.error(error);
+  //     return res.status(500).send("Error de servidor");
+  //   }
+  // },
   //   mailForgotPassword: async (
   //     req: Request,
   //     res: Response

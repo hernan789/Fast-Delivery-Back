@@ -1,11 +1,5 @@
 import jwt from "jsonwebtoken";
-
-interface Payload {
-  name: string;
-  surname: string;
-  email: string;
-  isAdmin: boolean;
-}
+import { Payload } from "../types/userTypes";
 
 export const generateToken = (payload: Payload): string => {
   return jwt.sign({ user: payload }, process.env.JWT_SECRET || '', { expiresIn: '2d' });

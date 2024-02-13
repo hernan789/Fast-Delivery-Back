@@ -9,7 +9,7 @@ router.post("/login", userController.login);//OK
 // router.post("/forgot-password", userController.mailForgotPassword);
 // router.post("/reset-password", userController.mailResetPassword);
 router.post("/logout", auth, userController.logout);//OK
-router.get("/me", auth, userController.me);
+// router.get("/me", auth, userController.me);
 router.delete("/:id", userController.deleteUserById)//OK
 
 export default router;

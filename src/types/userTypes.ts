@@ -11,3 +11,11 @@ export interface LoginRequestBody {
   password: string;
 }
 
+
+export interface Payload {
+  name: string;
+  surname: string;
+  email: string;
+  isAdmin: boolean;
+}
+

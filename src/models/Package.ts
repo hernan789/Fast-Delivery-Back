@@ -23,7 +23,6 @@ Package.init(
     owner: {
       type: S.STRING,
       allowNull: false,
-      defaultValue: "N/A"
     },
     weight: {
       type: S.INTEGER,

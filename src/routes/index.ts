@@ -19,9 +19,11 @@
 
 import express, { Request, Response, Router } from 'express';
 import usersRouter from './users';
+import packagesRouter from "./packages"
 
 const router: Router = express.Router();
 
 router.use("/users", usersRouter);
+router.use("/packages", packagesRouter)
 
 export default router;
