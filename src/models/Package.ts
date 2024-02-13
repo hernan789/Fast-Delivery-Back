@@ -7,7 +7,8 @@ enum PackageStatus {
   PENDING = "pending",
 }
 class Package extends S.Model {
-  adress: string;
+  trackId: string;
+  address: string;
   status: PackageStatus;
   owner: string;
   weight: number;
@@ -16,7 +17,11 @@ class Package extends S.Model {
 
 Package.init(
   {
-    adress: {
+    trackId: {
+      type: S.STRING,
+      allowNull: true,
+    },
+    address: {
       type: S.STRING,
       allowNull: false,
     },
@@ -27,8 +32,7 @@ Package.init(
         PackageStatus.PENDING
       ),
       allowNull: false,
-      defaultValue : PackageStatus.PENDING
-      
+      defaultValue: PackageStatus.PENDING,
     },
     owner: {
       type: S.STRING,
@@ -41,10 +45,21 @@ Package.init(
     date: {
       type: S.DATE,
       allowNull: false,
-      defaultValue: Date.now()
+      defaultValue: Date.now(),
     },
   },
   { sequelize: db, modelName: "packages" }
 );
-
+Package.beforeCreate(async (packages) => {
+  try {
+    const trackId = `#${Math.floor(Math.random() * 10)}${String.fromCharCode(
+      97 + Math.floor(Math.random() * 26)
+    )}${Math.floor(Math.random() * 100)}${Math.floor(Math.random() * 100)} ${
+      packages.weight
+    } `;
+    packages.trackId = trackId;
+  } catch (error) {
+    throw new Error("ERROR");
+  }
+});
 export default Package;
