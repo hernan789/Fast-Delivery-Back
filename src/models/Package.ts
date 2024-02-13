@@ -7,7 +7,7 @@ enum PackageStatus {
   PENDING = "pending",
 }
 class Package extends S.Model {
-  adress: string;
+  address: string;
   status: PackageStatus;
   owner: string;
   weight: number;
@@ -16,7 +16,7 @@ class Package extends S.Model {
 
 Package.init(
   {
-    adress: {
+    address: {
       type: S.STRING,
       allowNull: false,
     },

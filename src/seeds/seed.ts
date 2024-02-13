@@ -43,52 +43,52 @@ export const users = [
 
 export const packages = [
   {
-    adress: "Amenabar 2100, CABA",
+    address: "Amenabar 2100, CABA",
     owner: "Juan",
     weight: 5,
   },
   {
-    adress: "Belgrano 696, CABA",
+    address: "Belgrano 696, CABA",
     owner: "Gaston",
     weight: 2,
   },
   {
-    adress: "Melian 1242, CABA",
+    address: "Melian 1242, CABA",
     owner: "Agustina",
     weight: 3,
   },
   {
-    adress: "Castillo 670, CABA",
+    address: "Castillo 670, CABA",
     owner: "Pilar",
     weight: 4,
   },
   {
-    adress: "Gorriti 4595, CABA",
+    address: "Gorriti 4595, CABA",
     owner: "Belen",
     weight: 1,
   },
   {
-    adress: "Tacuari 1797, CABA",
+    address: "Tacuari 1797, CABA",
     owner: "Nicolas",
     weight: 5,
   },
   {
-    adress: "Alcorta 1300, CABA",
+    address: "Alcorta 1300, CABA",
     owner: "Manuel",
     weight: 4,
   },
   {
-    adress: "Lavalle 830, CABA",
+    address: "Lavalle 830, CABA",
     owner: "Franco",
     weight: 3,
   },
   {
-    adress: "Mitre 210, CABA",
+    address: "Mitre 210, CABA",
     owner: "Joaquin",
     weight: 1,
   },
   {
-    adress: "Lacroze 1520, CABA",
+    address: "Lacroze 1520, CABA",
     owner: "Justina",
     weight: 2,
   },

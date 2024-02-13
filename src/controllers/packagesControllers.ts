@@ -7,7 +7,7 @@ const packagesControllers = {
 createPackages: async (req: Request, res: Response) => {
   try {
     const { address, owner, weight, date }: PackageData = req.body;
-    if (!address || !weight || !date || !owner) return res.status(400).json({ message: 'Por favor, completa todos los campos' });
+    if (!address || !owner || !weight || !date) return res.status(400).json({ message: 'Por favor, completa todos los campos' });
     const newPackage = await Package.create({
       address,
       owner,
