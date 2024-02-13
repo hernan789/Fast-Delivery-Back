@@ -1,12 +1,17 @@
-import S from "sequelize";
+import S, { EnumDataType } from "sequelize";
 import db from "../config/index";
 
+enum PackageStatus {
+  DELIVERED = "delivered",
+  CANCELLED = "cancelled",
+  IN_PROGRESS = "inProgress",
+}
 class Package extends S.Model {
   adress: string;
-  status: string;
+  status: PackageStatus;
   owner: string;
-  isAdmin: boolean;
-  date: number;
+  weight: number;
+  date: Date;
 }
 
 Package.init(
@@ -16,7 +21,11 @@ Package.init(
       allowNull: false,
     },
     status: {
-      type: S.ENUM("delivered", "cancelled", "inprogress"),
+      type: S.ENUM(
+        PackageStatus.DELIVERED,
+        PackageStatus.CANCELLED,
+        PackageStatus.IN_PROGRESS
+      ),
       allowNull: false,
     },
     owner: {
