@@ -4,7 +4,7 @@ import db from "../config/index";
 enum PackageStatus {
   DELIVERED = "delivered",
   CANCELLED = "cancelled",
-  IN_PROGRESS = "inProgress",
+  PENDING = "pending",
 }
 class Package extends S.Model {
   adress: string;
@@ -24,9 +24,11 @@ Package.init(
       type: S.ENUM(
         PackageStatus.DELIVERED,
         PackageStatus.CANCELLED,
-        PackageStatus.IN_PROGRESS
+        PackageStatus.PENDING
       ),
       allowNull: false,
+      defaultValue : PackageStatus.PENDING
+      
     },
     owner: {
       type: S.STRING,
@@ -39,6 +41,7 @@ Package.init(
     date: {
       type: S.DATE,
       allowNull: false,
+      defaultValue: Date.now()
     },
   },
   { sequelize: db, modelName: "packages" }
