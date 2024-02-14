@@ -11,7 +11,7 @@ class Package extends S.Model {
   declare trackId: string;
   declare address: string;
   declare status: PackageStatus;
-  declare owner: string;
+  declare client: string;
   declare weight: number;
   declare date: Date;
 }
@@ -35,7 +35,7 @@ Package.init(
       allowNull: false,
       defaultValue: PackageStatus.PENDING,
     },
-    owner: {
+    client: {
       type: S.STRING,
       allowNull: false,
     },
