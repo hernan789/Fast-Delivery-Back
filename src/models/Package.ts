@@ -52,17 +52,31 @@ Package.init(
   },
   { sequelize: db, modelName: "packages" }
 );
+//////HACE QUE EL CODIGO QUE SE GENEREA SEA UN POCO MAS CORTO A COMPARACION DEL DE ABAJO
 Package.beforeCreate(async (packages) => {
   try {
     const trackId = `#${Math.floor(Math.random() * 10)}${String.fromCharCode(
       65 + Math.floor(Math.random() * 26)
-    )}${Math.floor(Math.random() * 100)}${Math.floor(Math.random() * 100)}${
-      packages.weight
-    } `;
+    )}${Math.floor(Math.random() * 1000)}`;
     packages.trackId = trackId;
   } catch (error) {
     throw new Error("ERROR");
   }
 });
+//////HACE QUE EL CODIGO QUE SE GENEREA SEA UN POCO MAS CORTO A COMPARACION DEL DE ABAJO
+
+// Package.beforeCreate(async (packages) => {
+//   try {
+//     const trackId = `#${Math.floor(Math.random() * 10)}${String.fromCharCode(
+//       65 + Math.floor(Math.random() * 26)
+//     )}${Math.floor(Math.random() * 100)}${Math.floor(Math.random() * 100)}${
+//       packages.weight
+//     } `;
+//     packages.trackId = trackId;
+//   } catch (error) {
+//     throw new Error("ERROR");
+//   }
+// });
+
 
 export default Package;
