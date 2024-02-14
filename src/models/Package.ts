@@ -1,4 +1,4 @@
-import S, { EnumDataType } from "sequelize";
+import S from "sequelize";
 import db from "../config/index";
 
 enum PackageStatus {
@@ -7,15 +7,14 @@ enum PackageStatus {
   PENDING = "pending",
 }
 
-interface Package {
-  trackId: string;
-  address: string;
-  status: PackageStatus;
-  owner: string;
-  weight: number;
-  date: Date;
+class Package extends S.Model {
+  declare trackId: string;
+  declare address: string;
+  declare status: PackageStatus;
+  declare owner: string;
+  declare weight: number;
+  declare date: Date;
 }
-class Package extends S.Model {}
 
 Package.init(
   {
@@ -52,31 +51,18 @@ Package.init(
   },
   { sequelize: db, modelName: "packages" }
 );
-//////HACE QUE EL CODIGO QUE SE GENEREA SEA UN POCO MAS CORTO A COMPARACION DEL DE ABAJO
+
 Package.beforeCreate(async (packages) => {
   try {
     const trackId = `#${Math.floor(Math.random() * 10)}${String.fromCharCode(
       65 + Math.floor(Math.random() * 26)
-    )}${Math.floor(Math.random() * 1000)}`;
+    )}${Math.floor(Math.random() * 10)}${Math.floor(Math.random() * 10)}${
+      packages.weight
+    } `;
     packages.trackId = trackId;
   } catch (error) {
     throw new Error("ERROR");
   }
 });
-//////HACE QUE EL CODIGO QUE SE GENEREA SEA UN POCO MAS CORTO A COMPARACION DEL DE ABAJO
-
-// Package.beforeCreate(async (packages) => {
-//   try {
-//     const trackId = `#${Math.floor(Math.random() * 10)}${String.fromCharCode(
-//       65 + Math.floor(Math.random() * 26)
-//     )}${Math.floor(Math.random() * 100)}${Math.floor(Math.random() * 100)}${
-//       packages.weight
-//     } `;
-//     packages.trackId = trackId;
-//   } catch (error) {
-//     throw new Error("ERROR");
-//   }
-// });
-
 
 export default Package;
