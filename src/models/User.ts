@@ -8,6 +8,7 @@ class User extends S.Model {
   email: string;
   password: string;
   isAdmin: boolean;
+  isDisabled: boolean;
   salt: string;
   resetPasswordToken: string | null;
   // resetPasswordExpires: Date | null;
@@ -22,8 +23,6 @@ class User extends S.Model {
     const newHash = await this.hash(password, currentSalt);
     return newHash === this.getDataValue("password");
   }
-  
-  
 }
 
 User.init(
@@ -47,6 +46,11 @@ User.init(
     },
     isAdmin: {
       type: S.BOOLEAN,
+      defaultValue: false,
+    },
+    isDisabled: {
+      type: S.BOOLEAN,
+      allowNull: false,
       defaultValue: false,
     },
     salt: {

@@ -206,6 +206,30 @@ const userController = {
       return res.status(500).json(error);
     }
   },
-};
+  getAllUsers: async (req: Request, res: Response) => {
+    try {
+      const users = await User.findAll({where: {isAdmin : false}, attributes:["name", "isDisabled"]});
+      res.json(users);
+    } catch (error) {
+      console.error('Error al obtener usuarios:', error);
+      res.status(500).json({ error: 'Error interno del servidor' });
+    }
+  },
+  getUserById: async (req: Request, res: Response) => {
+    const userId: string = req.params.id;
+    
+    try {
+      const user = await User.findByPk(userId, {attributes:["name", "isDisabled"]}); 
+    
+      if (!user) return res.status(404).json({ error: 'Usuario no encontrado' }); 
+      
+      res.json(user); 
+    } catch (error) {
+      console.error('Error al obtener usuario por ID:', error);
+      res.status(500).json({ error: 'Error interno del servidor' });
+    }
+    
+  },
+}
 
 export default userController;

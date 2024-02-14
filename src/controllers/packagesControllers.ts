@@ -55,6 +55,20 @@ deletePackage: async (req: Request, res: Response) => {
   }
 },
 
+// assignPackage: async (req: Request, res: Response) => {
+//   const { id } = req.params;
+//   const userId = req.user.id; 
+//   try {
+//     const packageItem = await Package.findByPk(id);
+//     if (!packageItem)return res.status(404).json({ message: 'Paquete no encontrado' }); 
+//     packageItem.userId = userId;
+//     await packageItem.save();
+//     return res.status(200).json({ message: 'Paquete asignado exitosamente' });
+//   } catch (error) {
+//     console.error('Error al asignar paquete:', error);
+//     return res.status(500).json({ error: 'Error interno del servidor' });
+//   }
+// },
 }
 
-export default packagesControllers
+export default packagesControllers;
