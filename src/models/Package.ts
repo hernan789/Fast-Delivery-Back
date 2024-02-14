@@ -6,7 +6,8 @@ enum PackageStatus {
   CANCELLED = "cancelled",
   PENDING = "pending",
 }
-class Package extends S.Model {
+
+interface Package {
   trackId: string;
   address: string;
   status: PackageStatus;
@@ -14,6 +15,7 @@ class Package extends S.Model {
   weight: number;
   date: Date;
 }
+class Package extends S.Model {}
 
 Package.init(
   {
@@ -53,8 +55,8 @@ Package.init(
 Package.beforeCreate(async (packages) => {
   try {
     const trackId = `#${Math.floor(Math.random() * 10)}${String.fromCharCode(
-      97 + Math.floor(Math.random() * 26)
-    )}${Math.floor(Math.random() * 100)}${Math.floor(Math.random() * 100)} ${
+      65 + Math.floor(Math.random() * 26)
+    )}${Math.floor(Math.random() * 100)}${Math.floor(Math.random() * 100)}${
       packages.weight
     } `;
     packages.trackId = trackId;
@@ -62,4 +64,5 @@ Package.beforeCreate(async (packages) => {
     throw new Error("ERROR");
   }
 });
+
 export default Package;
