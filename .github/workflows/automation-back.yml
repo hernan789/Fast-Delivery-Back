@@ -35,12 +35,6 @@ jobs:
       - name: Install Dependencies
         run: npm install
 
-      - name: Run Sequelize migrations
-        run: npx sequelize-cli db:migrate
-        env:
-          NODE_ENV: development
-          DATABASE_URL: postgres://postgres:postgres@localhost:5432/fdeliverydb
-
       - name: Build
         run: npm run build
 
