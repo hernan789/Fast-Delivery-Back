@@ -16,8 +16,8 @@ jobs:
       postgres:
         image: postgres:latest
         env:
-          POSTGRES_USER: NULL
-          POSTGRES_PASSWORD: NULL
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
           POSTGRES_DB: fdeliverydb
         ports:
           - 5432:5432
@@ -39,11 +39,12 @@ jobs:
         run: npx sequelize-cli db:migrate
         env:
           NODE_ENV: development
-          DATABASE_URL: postgres://NULL:NULL@localhost:5432/fdeliverydb
+          DATABASE_URL: postgres://postgres:postgres@localhost:5432/fdeliverydb
 
       - name: Build
         run: npm run build
 
       - name: Run Tests
         run: npm run test
+
 
