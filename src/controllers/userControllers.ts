@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import User from "../models/User";
 import { generateToken } from "../config/token";
 import { LoginRequestBody, CreateUserRequestBody } from "../types/userTypes";
- import { CustomRequest } from "../middlewares/auth.ts";
+//  import { CustomRequest } from "../middlewares/auth.ts";
 import validate from "../utils/validations";
 import { transporter } from "../config/mailTRansporter";
 import emailTemplates from "../utils/emailTemplates.ts";
@@ -65,11 +65,11 @@ const userController = {
       const isOk = await existingUser.validatePassword(password);
       if (!isOk) return res.sendStatus(401);
 
+      const existingUserToJson = existingUser.toJSON()
+
       const token = generateToken({
-        name: existingUser.name,
-        surname: existingUser.surname,
-        email: existingUser.email,
-        isAdmin: existingUser.isAdmin,
+        id: existingUserToJson.id,
+        isAdmin: existingUserToJson.isAdmin,
       });
       res.cookie("token", token, { httpOnly: true });
       return res.status(200).json({ message: "Usuario logeado con éxito." });

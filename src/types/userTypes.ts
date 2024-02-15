@@ -13,9 +13,7 @@ export interface LoginRequestBody {
 
 
 export interface Payload {
-  name: string;
-  surname: string;
-  email: string;
+  id: number
   isAdmin: boolean;
 }
 
