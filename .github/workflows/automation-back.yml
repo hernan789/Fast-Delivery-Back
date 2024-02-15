@@ -12,6 +12,17 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
+    services:
+      postgres:
+        image: postgres:latest
+        env:
+          POSTGRES_USER: NULL
+          POSTGRES_PASSWORD: NULL
+          POSTGRES_DB: fdeliverydb
+        ports:
+          - 5432:5432
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4.1.1
@@ -24,8 +35,15 @@ jobs:
       - name: Install Dependencies
         run: npm install
 
+      - name: Run Sequelize migrations
+        run: npx sequelize-cli db:migrate
+        env:
+          NODE_ENV: development
+          DATABASE_URL: postgres://NULL:NULL@localhost:5432/fdeliverydb
+
       - name: Build
         run: npm run build
 
       - name: Run Tests
         run: npm run test
+
