@@ -3,6 +3,7 @@ const bcrypt = require("bcrypt");
 import db from "../config/index";
 
 class User extends S.Model {
+  id: number;
   name: string;
   surname: string;
   email: string;

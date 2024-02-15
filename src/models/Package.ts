@@ -14,6 +14,7 @@ class Package extends S.Model {
   declare client: string;
   declare weight: number;
   declare date: Date;
+  declare userId: number;
 }
 
 Package.init(

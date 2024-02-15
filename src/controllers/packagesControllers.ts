@@ -3,6 +3,13 @@ import Package from "../models/Package.ts";
 import validate from "../utils/validations";
 import { PackageData } from "../types/packagesTypes.ts";
 
+
+interface CustomRequest extends Request {
+  user?: {
+    id: number;
+  };
+}
+
 const packagesControllers = {
   createPackages: async (req: Request, res: Response) => {
     try {
@@ -60,20 +67,22 @@ const packagesControllers = {
     }
   },
 
-  // assignPackage: async (req: Request, res: Response) => {
-  //   const { id } = req.params;
-  //   const userId = req.user.id;
-  //   try {
-  //     const packageItem = await Package.findByPk(id);
-  //     if (!packageItem)return res.status(404).json({ message: 'Paquete no encontrado' });
-  //     packageItem.userId = userId;
-  //     await packageItem.save();
-  //     return res.status(200).json({ message: 'Paquete asignado exitosamente' });
-  //   } catch (error) {
-  //     console.error('Error al asignar paquete:', error);
-  //     return res.status(500).json({ error: 'Error interno del servidor' });
-  //   }
-  // },
+  assignPackage: async (req: CustomRequest, res: Response) => {
+    const { id } = req.params;
+    const userId = req.user.id;
+    console.log(userId)
+    console.log(id)
+    try {
+      const packageItem = await Package.findByPk(id);
+      if (!packageItem)return res.status(404).json({ message: 'Paquete no encontrado' });
+      packageItem.userId = userId;
+      await packageItem.save();
+      return res.status(200).json({ message: 'Paquete asignado exitosamente' });
+    } catch (error) {
+      console.error('Error al asignar paquete:', error);
+      return res.status(500).json({ error: 'Error interno del servidor' });
+    }
+  },
 };
 
 export default packagesControllers;
