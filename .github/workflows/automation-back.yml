@@ -3,7 +3,7 @@ name: automation-back
 on:
   push:
     branches:
-      - developer
+      - main
   pull_request:
     branches:
       - main
