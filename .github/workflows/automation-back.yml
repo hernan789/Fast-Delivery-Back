@@ -27,6 +27,12 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4.1.1
 
+      - name: Debug Environment Variables  
+        run: |
+          echo "POSTGRES_USER: $POSTGRES_USER"
+          echo "POSTGRES_PASSWORD: $POSTGRES_PASSWORD"
+          echo "POSTGRES_DB: $POSTGRES_DB"
+
       - name: Setup Node.js environment
         uses: actions/setup-node@v4.0.2
         with:
