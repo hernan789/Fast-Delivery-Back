@@ -1,4 +1,4 @@
-name: automation-back
+name: pipeline-back
 
 on:
   push:
