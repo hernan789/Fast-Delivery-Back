@@ -51,7 +51,6 @@ jobs:
 
       # queries database with postgres client
       - name: Install PostgreSQL client
-    # ...
       - name: Setup database
         run: psql -h fdeliverydb -U postgres -c 'CREATE DATABASE "fdeliverydb";'
         env:
