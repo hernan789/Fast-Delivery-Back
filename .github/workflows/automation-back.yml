@@ -51,10 +51,13 @@ jobs:
 
       # queries database with postgres client
       - name: Install PostgreSQL client
+        run: |
+          apt-get update
+          apt-get install --yes postgresql-client
       - name: Setup database
         run: psql -h fdeliverydb -U postgres -c 'CREATE DATABASE "fdeliverydb";'
         env:
-          PGPASSWORD: postgres
+          POSTGRES_PASSWORD: postgres
 
           
 
