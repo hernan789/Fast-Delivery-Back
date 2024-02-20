@@ -3,6 +3,7 @@ const bcrypt = require("bcrypt");
 import db from "../config/index";
 
 class User extends S.Model {
+
   declare name: string;
   declare surname: string;
   declare email: string;
@@ -11,6 +12,7 @@ class User extends S.Model {
   declare isDisabled: boolean;
   declare salt: string;
   declare resetPasswordToken: string | null;
+
   // resetPasswordExpires: Date | null;
   // declare picture: string;
 

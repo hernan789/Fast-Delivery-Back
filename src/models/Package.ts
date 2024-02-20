@@ -5,6 +5,7 @@ enum PackageStatus {
   DELIVERED = "delivered",
   CANCELLED = "cancelled",
   PENDING = "pending",
+  ONGOING = "ongoing"
 }
 
 class Package extends S.Model {
@@ -14,6 +15,7 @@ class Package extends S.Model {
   declare client: string;
   declare weight: number;
   declare date: Date;
+  declare userId: number;
 }
 
 Package.init(
@@ -30,7 +32,8 @@ Package.init(
       type: S.ENUM(
         PackageStatus.DELIVERED,
         PackageStatus.CANCELLED,
-        PackageStatus.PENDING
+        PackageStatus.PENDING,
+        PackageStatus.ONGOING
       ),
       allowNull: false,
       defaultValue: PackageStatus.PENDING,

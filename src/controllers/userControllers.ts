@@ -7,6 +7,14 @@ import validate from "../utils/validations";
 import { transporter } from "../config/mailTRansporter";
 import emailTemplates from "../utils/emailTemplates.ts";
 
+
+interface CustomRequest extends Request {
+  user?: {
+    id: number;
+  };
+}
+
+
 const userController = {
   register: async (req: Request, res: Response): Promise<Response> => {
     try {
@@ -64,11 +72,11 @@ const userController = {
       const isOk = await existingUser.validatePassword(password);
       if (!isOk) return res.sendStatus(401);
 
+      const existingUserToJson = existingUser.toJSON()
+
       const token = generateToken({
-        name: existingUser.name,
-        surname: existingUser.surname,
-        email: existingUser.email,
-        isAdmin: existingUser.isAdmin,
+        id: existingUserToJson.id,
+        isAdmin: existingUserToJson.isAdmin,
       });
       res.cookie("token", token, { httpOnly: true });
       return res.status(200).json({ message: "Usuario logeado con éxito." });
@@ -85,27 +93,27 @@ const userController = {
     res.clearCookie("token");
     return res.status(204).json({ message: "Deslogueado correctamente" });
   },
-  // me: async (req: CustomRequest, res: Response): Promise<Response> => {
-  //   const useremail = req.user?.email;
-  //   if (!useremail) {
-  //     return res
-  //       .status(400)
-  //       .json({ message: "Email no encontrado en el token." });
-  //   }
-  //   try {
-  //     const user = await User.findOne({
-  //       where: { email: useremail },
-  //       attributes: ["name", "surname", "email", "isAdmin"],
-  //     });
-  //     if (!user) {
-  //       return res.status(404).json({ message: "Usuario no encontrado." });
-  //     }
-  //     return res.json(user.get({ plain: true }));
-  //   } catch (error) {
-  //     console.error(error);
-  //     return res.status(500).send("Error de servidor");
-  //   }
-  // },
+  me: async (req: CustomRequest, res: Response): Promise<Response> => {
+    const userId = req.user.id;
+    if (!userId) {
+      return res
+        .status(400)
+        .json({ message: "id no encontrado en el token." });
+    }
+    try {
+      const user = await User.findOne({
+        where: { userId: userId },
+        attributes: ["name", "surname", "email", "isAdmin"],
+      });
+      if (!user) {
+        return res.status(404).json({ message: "Usuario no encontrado." });
+      }
+      return res.json(user.get({ plain: true }));
+    } catch (error) {
+      console.error(error);
+      return res.status(500).send("Error de servidor");
+    }
+  },
   //   mailForgotPassword: async (
   //     req: Request,
   //     res: Response

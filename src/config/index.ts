@@ -1,9 +1,22 @@
 import { Sequelize } from "sequelize";
-const db = new Sequelize("fdeliverydb", null, null, {
-  host: "localhost",
-  dialect: "postgres",
-  logging: false,
-});
+require("dotenv").config();
+
+const db = new Sequelize(
+  process.env.POSTGRES_DB,
+  process.env.POSTGRES_USER,
+  process.env.POSTGRES_PASSWORD,
+  {
+    host: "localhost",
+    dialect: "postgres",
+    logging: false,
+  }
+);
+// const db = new Sequelize("fdeliverydb", null, null, {
+//   host: "localhost",
+//   dialect: "postgres",
+//   logging: false,
+// });
+
 db.authenticate()
   .then(() => {
     console.log("Conexión exitosa a la base de datos", db.config.database);
@@ -11,4 +24,5 @@ db.authenticate()
   .catch((err: Error) => {
     console.error("No se pudo conectar a la base de datos", err);
   });
+
 export default db;
