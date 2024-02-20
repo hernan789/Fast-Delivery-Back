@@ -20,7 +20,8 @@
     "lint": "eslint .",
     "precommit": "lint-staged",
     "start": "nodemon server.ts",
-    "test": "jest"
+    "test": "jest",
+    "test-db-connection": "ts-node ./src/config/index.ts"
   },
   "repository": {
     "type": "git",

@@ -3,46 +3,61 @@ name: pipeline-back
 on:
   push:
     branches:
-      - main
+      - developer
   pull_request:
     branches:
       - main
 
 jobs:
-  build:
+  # label of the container job
+  postgres-job:
+    # containers must run in Linux based operating systems
     runs-on: ubuntu-latest
+    # Docker Hub image that `postgres-job` executes in
+    container: node:latest
 
+    # service containers to run with `postgres-job`
     services:
+      # label used to access the service container
       postgres:
+        # Docker Hub image
         image: postgres:latest
+        # service environment variables
+        # `POSTGRES_HOST` is `postgres`
         env:
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: postgres
+          # optional (defaults to `postgres`)
           POSTGRES_DB: fdeliverydb
+          # required
+          POSTGRES_PASSWORD: postgres
+          # optional (defaults to `5432`)
+          POSTGRES_PORT: 5432
+          # optional (defaults to `postgres`)
+          POSTGRES_USER: postgres
         ports:
+          # maps tcp port 5432 on service container to the host
           - 5432:5432
-        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+        # set health checks to wait until postgres has started
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
 
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4.1.1
-
-      - name: Debug Environment Variables  
+      - name: Install PostgreSQL client
         run: |
-          echo "POSTGRES_USER: $POSTGRES_USER"
-          echo "POSTGRES_PASSWORD: $POSTGRES_PASSWORD"
-          echo "POSTGRES_DB: $POSTGRES_DB"
+          apt-get update
+          apt-get install --yes postgresql-client
 
-      - name: Setup Node.js environment
-        uses: actions/setup-node@v4.0.2
-        with:
-          node-version: "20"
+      # queries database with postgres client
+      - name: Install PostgreSQL client
+        run: |
+          apt-get update
+          apt-get install --yes postgresql-client
+      - name: Setup database
+        run: psql -h fdeliverydb -U postgres -c 'CREATE DATABASE "fdeliverydb";'
+        env:
+          POSTGRES_PASSWORD: postgres
 
-      - name: Install Dependencies
-        run: npm install
+          
 
-      - name: Build
-        run: npm run build
-
-      - name: Run Tests
-        run: npm run test
