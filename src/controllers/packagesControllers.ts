@@ -52,6 +52,16 @@ const packagesControllers = {
       return res.status(500).json({ error: "Error interno del servidor" });
     }
   },
+getUserPackages : async (req: CustomRequest, res: Response) => {
+    const userId = req.user.id; 
+    try {
+      const userPackages = await Package.findAll({ where: { userId } });
+      return res.status(200).json(userPackages); 
+    } catch (error) {
+      console.error('Error al obtener los paquetes del usuario:', error);
+      return res.status(500).json({ error: 'Error interno del servidor' });
+    }
+  },
   deletePackage: async (req: Request, res: Response) => {
     try {
       const { id } = req.params;
@@ -66,12 +76,9 @@ const packagesControllers = {
       return res.status(500).json({ error: "Error interno del servidor" });
     }
   },
-
   assignPackage: async (req: CustomRequest, res: Response) => {
     const { id } = req.params;
     const userId = req.user.id;
-    console.log(userId)
-    console.log(id)
     try {
       const packageItem = await Package.findByPk(id);
       if (!packageItem)return res.status(404).json({ message: 'Paquete no encontrado' });
@@ -83,6 +90,24 @@ const packagesControllers = {
       return res.status(500).json({ error: 'Error interno del servidor' });
     }
   },
+  removeUserFromPackage: async (req: CustomRequest, res: Response) => {
+    const { id } = req.params;
+    try {
+        const packageItem = await Package.findByPk(id);
+        if (!packageItem) {
+            return res.status(404).json({ message: 'Paquete no encontrado' });
+        }
+        if (!packageItem.userId) {
+            return res.status(400).json({ message: 'El paquete no tiene un usuario asignado' });
+        }
+        packageItem.userId = null;
+        await packageItem.save();
+        return res.status(200).json({ message: 'Usuario removido exitosamente del paquete' });
+    } catch (error) {
+        console.error('Error al remover usuario del paquete:', error);
+        return res.status(500).json({ error: 'Error interno del servidor' });
+    }
+}
 };
 
 export default packagesControllers;
