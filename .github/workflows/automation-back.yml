@@ -50,10 +50,12 @@ jobs:
           apt-get install --yes postgresql-client
 
       # queries database with postgres client
-      - name: Query database
-        run: psql -h postgres -d fdeliverydb -U postgres -c 'SELECT 1;'
+      - name: Install PostgreSQL client
+    # ...
+      - name: Setup database
+        run: psql -h fdeliverydb -U postgres -c 'CREATE DATABASE "fdeliverydb";'
         env:
-          # postgress password is required; alternatively, you can run:
-          # `PGPASSWORD=postgres_password psql ...`
-          PGPASSWORD: fdeliverydb
+          PGPASSWORD: postgres
+
+          
 
