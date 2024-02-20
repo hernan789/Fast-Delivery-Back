@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import User from "../models/User";
 import { generateToken } from "../config/token";
 import { LoginRequestBody, CreateUserRequestBody } from "../types/userTypes";
-import { CustomRequest } from "../middlewares/auth.ts";
+// import { CustomRequest } from "../middlewares/auth.ts";
 import validate from "../utils/validations";
 import { transporter } from "../config/mailTRansporter";
 import emailTemplates from "../utils/emailTemplates.ts";
@@ -41,8 +41,8 @@ const userController = {
         isAdmin,
       });
       const userResponse = { ...newUser.toJSON(), password: undefined };
-      const mailOptions = emailTemplates.welcome(userResponse);
-      await transporter.sendMail(mailOptions);
+      // const mailOptions = emailTemplates.welcome(userResponse);
+      // await transporter.sendMail(mailOptions);
       res.status(201).json(userResponse);
     } catch (err) {
       console.error(err);
@@ -87,7 +87,7 @@ const userController = {
   },
 
   logout: async (req: Request, res: Response): Promise<Response> => {
-    if (!req.cookies.token) {
+    if (!req.cookies ||!req.cookies.token) {
       return res.status(400).json({ message: "No hay sesión iniciada." });
     }
     res.clearCookie("token");
