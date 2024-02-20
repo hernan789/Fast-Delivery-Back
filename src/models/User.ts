@@ -3,16 +3,16 @@ const bcrypt = require("bcrypt");
 import db from "../config/index";
 
 class User extends S.Model {
-  name: string;
-  surname: string;
-  email: string;
-  password: string;
-  isAdmin: boolean;
-  isDisabled: boolean;
-  salt: string;
-  resetPasswordToken: string | null;
+  declare name: string;
+  declare surname: string;
+  declare email: string;
+  declare password: string;
+  declare isAdmin: boolean;
+  declare isDisabled: boolean;
+  declare salt: string;
+  declare resetPasswordToken: string | null;
   // resetPasswordExpires: Date | null;
-  picture: string;
+  // declare picture: string;
 
   public hash(password: string, salt: string): Promise<string> {
     return bcrypt.hash(password, salt);
