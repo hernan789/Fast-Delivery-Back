@@ -2,9 +2,11 @@ import { Request, Response } from "express";
 import User from "../models/User";
 import { generateToken } from "../config/token";
 import { LoginRequestBody, CreateUserRequestBody } from "../types/userTypes";
+import { CustomRequest } from "../middlewares/auth.ts";
 import validate from "../utils/validations";
 import { transporter } from "../config/mailTRansporter";
 import emailTemplates from "../utils/emailTemplates.ts";
+
 
 interface CustomRequest extends Request {
   user?: {
@@ -213,28 +215,33 @@ const userController = {
   },
   getAllUsers: async (req: Request, res: Response) => {
     try {
-      const users = await User.findAll({where: {isAdmin : false}, attributes:["name", "isDisabled"]});
+      const users = await User.findAll({
+        where: { isAdmin: false },
+        attributes: ["name", "isDisabled"],
+      });
       res.json(users);
     } catch (error) {
-      console.error('Error al obtener usuarios:', error);
-      res.status(500).json({ error: 'Error interno del servidor' });
+      console.error("Error al obtener usuarios:", error);
+      res.status(500).json({ error: "Error interno del servidor" });
     }
   },
   getUserById: async (req: Request, res: Response) => {
     const userId: string = req.params.id;
-    
+
     try {
-      const user = await User.findByPk(userId, {attributes:["name", "isDisabled"]}); 
-    
-      if (!user) return res.status(404).json({ error: 'Usuario no encontrado' }); 
-      
-      res.json(user); 
+      const user = await User.findByPk(userId, {
+        attributes: ["name", "isDisabled"],
+      });
+
+      if (!user)
+        return res.status(404).json({ error: "Usuario no encontrado" });
+
+      res.json(user);
     } catch (error) {
-      console.error('Error al obtener usuario por ID:', error);
-      res.status(500).json({ error: 'Error interno del servidor' });
+      console.error("Error al obtener usuario por ID:", error);
+      res.status(500).json({ error: "Error interno del servidor" });
     }
-    
   },
-}
+};
 
 export default userController;
