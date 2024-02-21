@@ -2,17 +2,15 @@ import { Request, Response } from "express";
 import User from "../models/User";
 import { generateToken } from "../config/token";
 import { LoginRequestBody, CreateUserRequestBody } from "../types/userTypes";
-import { CustomRequest } from "../middlewares/auth.ts";
 import validate from "../utils/validations";
 import { transporter } from "../config/mailTRansporter";
 import emailTemplates from "../utils/emailTemplates.ts";
 
-interface LocalCustomRequest extends Request {
+interface CustomRequest extends Request {
   user?: {
     id: number;
   };
 }
-
 const userController = {
   register: async (req: Request, res: Response): Promise<Response> => {
     try {
@@ -47,7 +45,6 @@ const userController = {
       return res.status(500).json({ error: "Error interno del servidor." });
     }
   },
-
   login: async (req: Request, res: Response): Promise<Response> => {
     const { email, password }: LoginRequestBody = req.body;
     if (!email) {
@@ -83,15 +80,14 @@ const userController = {
       return res.status(500).json({ error: "Error interno del servidor." });
     }
   },
-
   logout: async (req: Request, res: Response): Promise<Response> => {
-    if (!req.cookies.token) {
+    if (!req.cookies ||!req.cookies.token) {
       return res.status(400).json({ message: "No hay sesión iniciada." });
     }
     res.clearCookie("token");
-    return res.status(204).json({ message: "Deslogueado correctamente" });
+    return res.status(204).send();
   },
-  me: async (req: LocalCustomRequest, res: Response): Promise<Response> => {
+  me: async (req: CustomRequest, res: Response): Promise<Response> => {
     const userId = req.user.id;
     if (!userId) {
       return res.status(400).json({ message: "id no encontrado en el token." });
@@ -213,9 +209,9 @@ const userController = {
     try {
       const users = await User.findAll({
         where: { isAdmin: false },
-        attributes: ["name", "isDisabled"],
+        attributes: ["name", "isDisabled", "isAdmin"],
       });
-      res.json(users);
+      res.json(users).status(200);
     } catch (error) {
       console.error("Error al obtener usuarios:", error);
       res.status(500).json({ error: "Error interno del servidor" });
@@ -223,7 +219,6 @@ const userController = {
   },
   getUserById: async (req: Request, res: Response) => {
     const userId: string = req.params.id;
-
     try {
       const user = await User.findByPk(userId, {
         attributes: ["name", "isDisabled"],
