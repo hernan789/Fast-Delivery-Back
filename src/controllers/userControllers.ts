@@ -7,13 +7,11 @@ import validate from "../utils/validations";
 import { transporter } from "../config/mailTRansporter";
 import emailTemplates from "../utils/emailTemplates.ts";
 
-
-interface CustomRequest extends Request {
+interface LocalCustomRequest extends Request {
   user?: {
     id: number;
   };
 }
-
 
 const userController = {
   register: async (req: Request, res: Response): Promise<Response> => {
@@ -72,7 +70,7 @@ const userController = {
       const isOk = await existingUser.validatePassword(password);
       if (!isOk) return res.sendStatus(401);
 
-      const existingUserToJson = existingUser.toJSON()
+      const existingUserToJson = existingUser.toJSON();
 
       const token = generateToken({
         id: existingUserToJson.id,
@@ -93,12 +91,10 @@ const userController = {
     res.clearCookie("token");
     return res.status(204).json({ message: "Deslogueado correctamente" });
   },
-  me: async (req: CustomRequest, res: Response): Promise<Response> => {
+  me: async (req: LocalCustomRequest, res: Response): Promise<Response> => {
     const userId = req.user.id;
     if (!userId) {
-      return res
-        .status(400)
-        .json({ message: "id no encontrado en el token." });
+      return res.status(400).json({ message: "id no encontrado en el token." });
     }
     try {
       const user = await User.findOne({
