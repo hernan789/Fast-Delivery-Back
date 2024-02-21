@@ -3,6 +3,7 @@ import app from "../server";
 import { describe, expect, it } from "@jest/globals";
 import auth from "../src/middlewares/auth";
 import jwt from "jsonwebtoken";
+
 describe("auth", () => {
   describe("me", () => {
     it("should return 401 if user id is not found in token", async () => {
@@ -23,12 +24,13 @@ describe("auth", () => {
       expect(response.status).toBe(400);
       expect(response.body).toEqual({ message: "Token is not valid" });
     });
+
     it("should authenticate user with valid token", async () => {
       const validUserId = 1;
       const payload = {
         user: {
-          email: "hernanduarte@gmail.com",
-          password: "Hernan1234",
+          email: "luisrobledo@gmail.com",
+          password: "Luis1234",
           id: validUserId,
           isAdmin: false,
         },
@@ -42,7 +44,11 @@ describe("auth", () => {
       expect(response.status).toBe(200);
 
       expect(response.body).toEqual({
+        email: "luisrobledo@gmail.com",
         id: validUserId,
+        isAdmin: false,
+        name: "Luis",
+        surname: "Robledo",
       });
     });
   });
