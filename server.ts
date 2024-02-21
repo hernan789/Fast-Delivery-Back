@@ -29,3 +29,5 @@ db.sync({ force: false })
     );
   })
   .catch((err: Error) => console.error(err));
+
+export default app;
