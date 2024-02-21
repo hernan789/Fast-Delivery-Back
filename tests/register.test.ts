@@ -1,7 +1,7 @@
-import { Request, Response } from "express";
 import User from "../src/models/User";
-import userController from "../src/controllers/userControllers";
-import { CreateUserRequestBody } from "../src/types/userTypes";
+import request from "supertest";
+import app from "../server";
+import db from "../src/config";
 
 describe('User Controller - Register', () => {
   beforeAll(async () => {
@@ -9,7 +9,7 @@ describe('User Controller - Register', () => {
   });
 
   test('should register a new user', async () => {
-    const reqBody: CreateUserRequestBody = {
+    const newUser = {
       name: 'John',
       surname: 'Doe',
       email: 'john@example.com',
@@ -17,21 +17,16 @@ describe('User Controller - Register', () => {
       isAdmin: false,
     };
 
-    const req = { body: reqBody } as Request;
-    const res = {
-      status: jest.fn().mockReturnThis(),
-      json: jest.fn(),
-    } as unknown as Response;
+    const response = await request(app)
+    .post('/api/users/register')
+    .send(newUser);
 
-    await userController.register(req, res);
-
-    expect(res.status).toHaveBeenCalledWith(201);
-    expect(res.json).toHaveBeenCalled();
-    expect(res.json).toHaveBeenCalledWith(expect.objectContaining({ name: 'John', email: 'john@example.com' }));
-  });
+    expect(response.status).toBe(201);
+    expect(response.body).toEqual(expect.objectContaining({name: 'John',email: 'john@example.com'}));
+  })
 
   test('should return 400 if email format is incorrect', async () => {
-    const reqBody: CreateUserRequestBody = {
+    const newUser = {
       name: 'John',
       surname: 'Doe',
       email: 'invalid-email',
@@ -39,17 +34,12 @@ describe('User Controller - Register', () => {
       isAdmin: false,
     };
 
-    const req = { body: reqBody } as Request;
-    const res = {
-      status: jest.fn().mockReturnThis(),
-      json: jest.fn(),
-    } as unknown as Response;
+    const response = await request(app)
+      .post('/api/users/register')
+      .send(newUser);
 
-    await userController.register(req, res);
-
-    expect(res.status).toHaveBeenCalledWith(400);
-    expect(res.json).toHaveBeenCalledWith({ message: "El email tiene un formato incorrecto." });
+    expect(response.status).toBe(400);
+    expect(response.body).toEqual({ message: "El email tiene un formato incorrecto." });
   });
-
-
 });
+

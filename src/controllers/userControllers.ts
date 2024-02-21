@@ -67,7 +67,7 @@ const userController = {
       const isOk = await existingUser.validatePassword(password);
       if (!isOk) return res.sendStatus(401);
 
-      const existingUserToJson = existingUser.toJSON()
+      const existingUserToJson = existingUser.toJSON();
 
       const token = generateToken({
         id: existingUserToJson.id,
@@ -85,14 +85,12 @@ const userController = {
       return res.status(400).json({ message: "No hay sesión iniciada." });
     }
     res.clearCookie("token");
-    return res.status(204).json({ message: "Deslogueado correctamente" });
+    return res.status(204).send();
   },
   me: async (req: CustomRequest, res: Response): Promise<Response> => {
     const userId = req.user.id;
     if (!userId) {
-      return res
-        .status(400)
-        .json({ message: "id no encontrado en el token." });
+      return res.status(400).json({ message: "id no encontrado en el token." });
     }
     try {
       const user = await User.findOne({
@@ -211,9 +209,9 @@ const userController = {
     try {
       const users = await User.findAll({
         where: { isAdmin: false },
-        attributes: ["name", "isDisabled"],
+        attributes: ["name", "isDisabled", "isAdmin"],
       });
-      res.json(users);
+      res.json(users).status(200);
     } catch (error) {
       console.error("Error al obtener usuarios:", error);
       res.status(500).json({ error: "Error interno del servidor" });
