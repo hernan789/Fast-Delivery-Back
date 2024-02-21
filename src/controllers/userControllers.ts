@@ -213,9 +213,9 @@ const userController = {
     try {
       const users = await User.findAll({
         where: { isAdmin: false },
-        attributes: ["name", "isDisabled"],
+        attributes: ["name", "isDisabled", "isAdmin"],
       });
-      res.json(users);
+      res.json(users).status(200);
     } catch (error) {
       console.error("Error al obtener usuarios:", error);
       res.status(500).json({ error: "Error interno del servidor" });
