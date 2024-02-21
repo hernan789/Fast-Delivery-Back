@@ -5,7 +5,7 @@ import db from "../src/config";
 
 describe('User Controller - Register', () => {
   beforeAll(async () => {
-    await User.destroy({ where: {} });
+    await User.destroy({ where:{ email: 'john@example.com'} });
   });
 
   test('should register a new user', async () => {

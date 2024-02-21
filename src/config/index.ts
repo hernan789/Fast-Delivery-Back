@@ -11,11 +11,6 @@ const db = new Sequelize(
     logging: false,
   }
 );
-// const db = new Sequelize("fdeliverydb", null, null, {
-//   host: "localhost",
-//   dialect: "postgres",
-//   logging: false,
-// });
 
 db.authenticate()
   .then(() => {
