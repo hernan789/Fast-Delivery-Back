@@ -81,7 +81,7 @@ const userController = {
     }
   },
   logout: async (req: Request, res: Response): Promise<Response> => {
-    if (!req.cookies ||!req.cookies.token) {
+    if (!req.cookies || !req.cookies.token) {
       return res.status(400).json({ message: "No hay sesión iniciada." });
     }
     res.clearCookie("token");
@@ -94,13 +94,16 @@ const userController = {
     }
     try {
       const user = await User.findOne({
-        where: { userId: userId },
+        where: { id: userId },
         attributes: ["name", "surname", "email", "isAdmin"],
       });
       if (!user) {
         return res.status(404).json({ message: "Usuario no encontrado." });
       }
-      return res.json(user.get({ plain: true }));
+      return res.json({
+        id: userId,
+        ...user.get({ plain: true }),
+      });
     } catch (error) {
       console.error(error);
       return res.status(500).send("Error de servidor");
