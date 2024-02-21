@@ -5,11 +5,16 @@ import db from "../src/config";
 
 describe("User Controller - Register", () => {
   beforeAll(async () => {
+    await db.validate();
     await User.destroy({
       where: {
         email: "john@example.com",
       },
     });
+  });
+
+  beforeAll(async () => {
+    await db.close();
   });
 
   test("should register a new user", async () => {

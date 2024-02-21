@@ -47,9 +47,7 @@ describe("userController", () => {
       expect(res.body).toEqual({ message: "Contraseña no proporcionada." });
     });
 
-
     it("should return 400 if no user was found", async () => {
-
       const testUser = {
         email: "garmando@gmail.com",
         password: "otroletravaladna",
@@ -61,9 +59,7 @@ describe("userController", () => {
       expect(res.body).toEqual({ error: "Usuario no encontrado." });
     });
 
-
     it("should return a status 200 if the login was successful", async () => {
-
       const testUser = {
         email: "hernanduarte@gmail.com",
         password: "Hernan1234",
