@@ -4,7 +4,7 @@ import userController from "../src/controllers/userControllers";
 import { CreateUserRequestBody } from "../src/types/userTypes";
 
 describe('User Controller - Register', () => {
-  beforeEach(async () => {
+  beforeAll(async () => {
     await User.destroy({ where: {} });
   });
 
@@ -13,7 +13,7 @@ describe('User Controller - Register', () => {
       name: 'John',
       surname: 'Doe',
       email: 'john@example.com',
-      password: 'password123',
+      password: 'Password123',
       isAdmin: false,
     };
 
