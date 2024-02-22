@@ -1,6 +1,6 @@
 import User from "../src/models/User";
 import request from "supertest";
-import app from "../server";
+import { app, server } from "../server";
 import db from "../src/config";
 
 describe("User Controller - Register", () => {
@@ -15,6 +15,7 @@ describe("User Controller - Register", () => {
 
   beforeAll(async () => {
     await db.close();
+    server.close();
   });
 
   test("should register a new user", async () => {

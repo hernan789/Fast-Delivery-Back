@@ -1,5 +1,5 @@
 import request from "supertest";
-import app from "../server";
+import { app, server } from "../server";
 import db from "../src/config";
 
 interface obj {
@@ -16,6 +16,7 @@ describe("Test get users", () => {
 
   afterAll(async () => {
     await db.close();
+    server.close();
   });
 
   test("api working", async () => {

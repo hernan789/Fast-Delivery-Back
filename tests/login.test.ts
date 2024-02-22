@@ -2,7 +2,7 @@ import db from "../src/config";
 import User from "../src/models/User";
 import { describe, expect, beforeEach, test } from "@jest/globals";
 import request from "supertest";
-import app from "../server.ts";
+import { app, server } from "../server";
 import {
   LoginRequestBody,
   CreateUserRequestBody,
@@ -16,6 +16,7 @@ describe("userController", () => {
 
     afterAll(async () => {
       await db.close();
+      server.close();
     });
 
     it("should return 400 if there is no", async () => {
