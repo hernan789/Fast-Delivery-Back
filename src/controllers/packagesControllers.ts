@@ -3,7 +3,6 @@ import Package from "../models/Package.ts";
 import validate from "../utils/validations";
 import { PackageData } from "../types/packagesTypes.ts";
 
-
 interface CustomRequest extends Request {
   user?: {
     id: number;
@@ -32,7 +31,10 @@ const packagesControllers = {
   },
   getAllPackages: async (req: Request, res: Response) => {
     try {
-      const packages = await Package.findAll();
+      const packages = await Package.findAll({
+        order: [["createdAt", "DESC"]],
+        limit: 20,
+      });
       return res.json(packages);
     } catch (error) {
       console.error("Error al obtener los paquetes:", error);
@@ -52,14 +54,14 @@ const packagesControllers = {
       return res.status(500).json({ error: "Error interno del servidor" });
     }
   },
-getUserPackages : async (req: CustomRequest, res: Response) => {
-    const userId = req.user.id; 
+  getUserPackages: async (req: CustomRequest, res: Response) => {
+    const userId = req.user.id;
     try {
       const userPackages = await Package.findAll({ where: { userId } });
-      return res.status(200).json(userPackages); 
+      return res.status(200).json(userPackages);
     } catch (error) {
-      console.error('Error al obtener los paquetes del usuario:', error);
-      return res.status(500).json({ error: 'Error interno del servidor' });
+      console.error("Error al obtener los paquetes del usuario:", error);
+      return res.status(500).json({ error: "Error interno del servidor" });
     }
   },
   deletePackage: async (req: Request, res: Response) => {
@@ -81,33 +83,38 @@ getUserPackages : async (req: CustomRequest, res: Response) => {
     const userId = req.user.id;
     try {
       const packageItem = await Package.findByPk(id);
-      if (!packageItem)return res.status(404).json({ message: 'Paquete no encontrado' });
+      if (!packageItem)
+        return res.status(404).json({ message: "Paquete no encontrado" });
       packageItem.userId = userId;
       await packageItem.save();
-      return res.status(200).json({ message: 'Paquete asignado exitosamente' });
+      return res.status(200).json({ message: "Paquete asignado exitosamente" });
     } catch (error) {
-      console.error('Error al asignar paquete:', error);
-      return res.status(500).json({ error: 'Error interno del servidor' });
+      console.error("Error al asignar paquete:", error);
+      return res.status(500).json({ error: "Error interno del servidor" });
     }
   },
   removeUserFromPackage: async (req: CustomRequest, res: Response) => {
     const { id } = req.params;
     try {
-        const packageItem = await Package.findByPk(id);
-        if (!packageItem) {
-            return res.status(404).json({ message: 'Paquete no encontrado' });
-        }
-        if (!packageItem.userId) {
-            return res.status(400).json({ message: 'El paquete no tiene un usuario asignado' });
-        }
-        packageItem.userId = null;
-        await packageItem.save();
-        return res.status(200).json({ message: 'Usuario removido exitosamente del paquete' });
+      const packageItem = await Package.findByPk(id);
+      if (!packageItem) {
+        return res.status(404).json({ message: "Paquete no encontrado" });
+      }
+      if (!packageItem.userId) {
+        return res
+          .status(400)
+          .json({ message: "El paquete no tiene un usuario asignado" });
+      }
+      packageItem.userId = null;
+      await packageItem.save();
+      return res
+        .status(200)
+        .json({ message: "Usuario removido exitosamente del paquete" });
     } catch (error) {
-        console.error('Error al remover usuario del paquete:', error);
-        return res.status(500).json({ error: 'Error interno del servidor' });
+      console.error("Error al remover usuario del paquete:", error);
+      return res.status(500).json({ error: "Error interno del servidor" });
     }
-}
+  },
 };
 
 export default packagesControllers;
