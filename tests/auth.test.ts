@@ -1,5 +1,5 @@
 import request from "supertest";
-import app from "../server";
+import { app, server } from "../server";
 import { describe, expect, it } from "@jest/globals";
 import auth from "../src/middlewares/auth";
 import jwt from "jsonwebtoken";
@@ -12,6 +12,7 @@ describe("auth", () => {
 
   afterAll(async () => {
     await db.close();
+    server.close();
   });
 
   describe("me", () => {
@@ -34,32 +35,31 @@ describe("auth", () => {
       expect(response.body).toEqual({ message: "Token is not valid" });
     });
 
-    // it("should authenticate user with valid token", async () => {
-    //   const validUserId = 1;
-    //   const payload = {
-    //     user: {
-    //       email: "luisrobledo@gmail.com",
-    //       password: "Luis1234",
-    //       id: validUserId,
-    //       isAdmin: false,
-    //     },
-    //   };
-    //   const token = jwt.sign(payload, process.env.JWT_SECRET || "");
+    it("should authenticate user with valid token", async () => {
+      const validUserId = 1;
+      const payload = {
+        user: {
+          email: "luisrobledo@gmail.com",
+          password: "Luis1234",
+          id: validUserId,
+          isAdmin: false,
+        },
+      };
+      const token = jwt.sign(payload, process.env.JWT_SECRET || "");
 
-    //   const response = await request(app)
-    //     .get("/api/users/me")
-    //     .set("Cookie", `token=${token}`);
+      const response = await request(app)
+        .get("/api/users/me")
+        .set("Cookie", `token=${token}`);
 
-    //   expect(response.status).toBe(200);
+      expect(response.status).toBe(200);
 
-    //   expect(response.body).toEqual({
-    //     email: "luisrobledo@gmail.com",
-    //     id: validUserId,
-    //     isAdmin: false,
-    //     name: "Luis",
-    //     surname: "Robledo",
-    //   });
-    // });
+      expect(response.body).toEqual({
+        email: "luisrobledo@gmail.com",
+        id: validUserId,
+        isAdmin: false,
+        name: "Luis",
+        surname: "Robledo",
+      });
+    });
   });
 });
-

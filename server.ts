@@ -9,7 +9,9 @@ const morgan = require("morgan");
 const cors = require("cors");
 const corsOrigin = process.env.CORS_ORIGIN || "http://localhost:3000";
 const serverPort = process.env.SERVER_PORT || 3001;
-
+const server = app.listen(serverPort, () =>
+  console.log(`Servidor levantado en el puerto ${serverPort}`)
+);
 config();
 
 app.use(cookieParser());
@@ -24,10 +26,8 @@ app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
 
 db.sync({ force: false })
   .then(() => {
-    app.listen(serverPort, () =>
-      console.log(`Servidor levantado en el puerto ${serverPort}`)
-    );
+    server;
   })
   .catch((err: Error) => console.error(err));
 
-export default app;
+export { app, server };

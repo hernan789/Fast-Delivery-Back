@@ -1,16 +1,15 @@
 import request from "supertest";
-import app from "../server";
+import { app, server } from "../server";
 import db from "../src/config";
 
 describe("User Controller - Logout", () => {
-  let server;
-
   beforeAll(async () => {
     await db.validate();
   });
 
   afterAll(async () => {
     await db.close();
+    server.close();
   });
 
   test("should return 400 if no session is started", async () => {
