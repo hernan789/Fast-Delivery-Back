@@ -3,43 +3,56 @@ import request from "supertest";
 import app from "../server";
 import db from "../src/config";
 
-describe('User Controller - Register', () => {
+describe("User Controller - Register", () => {
   beforeAll(async () => {
+    await db.validate();
+    await User.destroy({
+      where: {
+        email: "john@example.com",
+      },
+    });
+  });
+
+  beforeAll(async () => {
+    await db.close();
     await User.destroy({ where:{ email: 'john@example.com'} });
   });
 
-  test('should register a new user', async () => {
+  test("should register a new user", async () => {
     const newUser = {
-      name: 'John',
-      surname: 'Doe',
-      email: 'john@example.com',
-      password: 'Password123',
+      name: "John",
+      surname: "Doe",
+      email: "john@example.com",
+      password: "Password123",
       isAdmin: false,
     };
 
     const response = await request(app)
-    .post('/api/users/register')
-    .send(newUser);
+      .post("/api/users/register")
+      .send(newUser);
 
     expect(response.status).toBe(201);
-    expect(response.body).toEqual(expect.objectContaining({name: 'John',email: 'john@example.com'}));
-  })
+    expect(response.body).toEqual(
+      expect.objectContaining({ name: "John", email: "john@example.com" })
+    );
+  });
 
-  test('should return 400 if email format is incorrect', async () => {
+  test("should return 400 if email format is incorrect", async () => {
     const newUser = {
-      name: 'John',
-      surname: 'Doe',
-      email: 'invalid-email',
-      password: 'password123',
+      name: "John",
+      surname: "Doe",
+      email: "invalid-email",
+      password: "password123",
       isAdmin: false,
     };
 
     const response = await request(app)
-      .post('/api/users/register')
+      .post("/api/users/register")
       .send(newUser);
 
     expect(response.status).toBe(400);
-    expect(response.body).toEqual({ message: "El email tiene un formato incorrecto." });
+    expect(response.body).toEqual({
+      message: "El email tiene un formato incorrecto.",
+    });
   });
 });
-

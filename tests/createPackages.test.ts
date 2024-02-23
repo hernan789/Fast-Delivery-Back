@@ -1,11 +1,19 @@
 import request from "supertest";
 import app from "../server";
 import db from "../src/config";
+import Package from "../src/models/Package";
 
 describe("Test create packages", () => {
   let authToken: string = "";
   beforeAll(async () => {
     await db.validate();
+    await Package.destroy({
+      where: {
+        address: "Los Alamos 407, Callao",
+        client: "Pepe",
+        weight: 5,
+      },
+    });
   });
 
   afterAll(async () => {
