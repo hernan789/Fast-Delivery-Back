@@ -109,87 +109,70 @@ const userController = {
       return res.status(500).send("Error de servidor");
     }
   },
-  //   mailForgotPassword: async (
-  //     req: Request,
-  //     res: Response
-  //   ): Promise<Response> => {
-  //     const { email } = req.body;
-  //     if (!email) {
-  //       return res
-  //         .status(400)
-  //         .json({ message: "El campo email es obligatorio." });
-  //     }
-  //     if (!validate.email(email)) {
-  //       return res
-  //         .status(400)
-  //         .json({ message: "El formato de correo electrónico es inválido." });
-  //     }
-  //     try {
-  //       const user = await User.findOne({ where: { email } });
-  //       if (!user) {
-  //         return res.status(404).json({ message: "Usuario no registrado." });
-  //       }
-  //       const resetToken = generateToken({
-  //         name: user.name,
-  //         surname: user.surname,
-  //         email: user.email,
-  //         isAdmin: user.isAdmin,
-  //       });
-  //       user.resetPasswordToken = resetToken;
-  //       await user.save();
-  //       const mailOptions = emailTemplates.forgotPassword(user, resetToken);
-  //       await transporter.sendMail(mailOptions);
-  //       res.json({
-  //         message:
-  //           "Se envió un correo electrónico con instrucciones para restablecer la contraseña.",
-  //       });
-  //     } catch (error) {
-  //       console.error(error);
-  //       res.status(500).json(error);
-  //     }
-  //   },
-  // mailResetPassword : async (req: Request, res: Response): Promise<Response> => {
-  //     const { token, newPassword } = req.body;
-  //     if (!token) {
-  //       return res.status(400).json({ message: "Se requiere un token." });
-  //     }
-  //     if (!newPassword) {
-  //       return res
-  //         .status(400)
-  //         .json({ message: "Se requiere ingresar una nueva contraseña." });
-  //     }
-  //     if (!validate.password(newPassword)) {
-  //       return res.status(400).json({
-  //         message:
-  //           "La nueva contraseña no cumple con los requisitos mínimos:\n" +
-  //           "✓ Solo letras y números.\n" +
-  //           "✓ 1 letra mayúscula.\n" +
-  //           "✓ 1 letra minúscula.\n" +
-  //           "✓ 1 número.\n" +
-  //           "✓ 8 caracteres de largo.",
-  //       });
-  //     }
-  //     try {
-  //       const user = await User.findOne({
-  //         where: {
-  //           resetPasswordToken: token,
-  //         },
-  //       });
-  //       if (!user) {
-  //         return res.status(400).json({ message: "Token inválido o expirado." });
-  //       }
-  //       const hashedPassword = await user.hash(newPassword, user.getDataValue("salt"));
-  //       user.password = hashedPassword;
-  //       user.resetPasswordToken = null;
-  //       await user.save();
-  //       const confirmMailOptions = emailTemplates.resetPasswordConfirmation(user);
-  //       await transporter.sendMail(confirmMailOptions);
-  //       res.json({ message: "Contraseña actualizada con éxito." });
-  //     } catch (error) {
-  //       console.error(error);
-  //       res.status(500).json(error);
-  //     }
-  //   },
+    mailForgotPassword: async (req: Request,res: Response): Promise<Response> => {
+      const { email } = req.body;
+      if (!email) return res.status(400).json({ message: "El campo email es obligatorio." });
+      if (!validate.email(email)) return res.status(400).json({ message: "El formato de correo electrónico es inválido." });
+      try {
+        const user = await User.findOne({ where: { email } });
+        if (!user) return res.status(404).json({ message: "Usuario no registrado." });
+        const userToJson = user.toJSON();
+        
+        const resetToken = generateToken({
+          id: userToJson.id,
+          isAdmin: userToJson.isAdmin,
+        });
+        userToJson.resetPasswordToken = resetToken;
+        await user.save();
+        const mailOptions = emailTemplates.forgotPassword(userToJson, resetToken);
+        await transporter.sendMail(mailOptions);res.json({ message:"Se envió un correo electrónico con instrucciones para restablecer la contraseña.",});
+      } catch (error) {
+        console.error(error);
+        res.status(500).json(error);
+      }
+    },
+  mailResetPassword : async (req: Request, res: Response): Promise<Response> => {
+      const { token, newPassword } = req.body;
+      if (!token) {
+        return res.status(400).json({ message: "Se requiere un token." });
+      }
+      if (!newPassword) {
+        return res
+          .status(400)
+          .json({ message: "Se requiere ingresar una nueva contraseña." });
+      }
+      if (!validate.password(newPassword)) {
+        return res.status(400).json({
+          message:
+            "La nueva contraseña no cumple con los requisitos mínimos:\n" +
+            "✓ Solo letras y números.\n" +
+            "✓ 1 letra mayúscula.\n" +
+            "✓ 1 letra minúscula.\n" +
+            "✓ 1 número.\n" +
+            "✓ 8 caracteres de largo.",
+        });
+      }
+      try {
+        const user = await User.findOne({
+          where: {
+            resetPasswordToken: token,
+          },
+        });
+        if (!user) {
+          return res.status(400).json({ message: "Token inválido o expirado." });
+        }
+        const hashedPassword = await user.hash(newPassword, user.getDataValue("salt"));
+        user.password = hashedPassword;
+        user.resetPasswordToken = null;
+        await user.save();
+        const confirmMailOptions = emailTemplates.resetPasswordConfirmation(user);
+        await transporter.sendMail(confirmMailOptions);
+        res.json({ message: "Contraseña actualizada con éxito." });
+      } catch (error) {
+        console.error(error);
+        res.status(500).json(error);
+      }
+    },
   deleteUserById: async (req: Request, res: Response): Promise<Response> => {
     const { id } = req.params;
     if (!id || isNaN(parseInt(id))) {

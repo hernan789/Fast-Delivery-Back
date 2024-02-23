@@ -58,6 +58,10 @@ User.init(
     salt: {
       type: S.STRING,
     },
+    resetPasswordToken: {
+      type: S.STRING,
+      allowNull: true,
+    },
   },
   { sequelize: db, modelName: "users" }
 );

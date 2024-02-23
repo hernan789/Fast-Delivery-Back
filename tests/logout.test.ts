@@ -1,7 +1,6 @@
 import request from "supertest";
 import { app, server } from "../server";
 import db from "../src/config";
-
 describe("User Controller - Logout", () => {
   beforeAll(async () => {
     await db.validate();

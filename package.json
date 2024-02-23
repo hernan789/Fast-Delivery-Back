@@ -20,7 +20,7 @@
     "lint": "eslint .",
     "precommit": "lint-staged",
     "start": "nodemon server.ts",
-    "test": "jest --detectOpenHandles",
+    "test": "jest --forceExit",
     "test-db-connection": "ts-node ./src/config/index.ts"
   },
   "repository": {
