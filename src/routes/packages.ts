@@ -14,10 +14,5 @@ router.put("/assign/:id", auth, packagesController.assignPackage); //OK // SE AS
 //AL CAMPO USERID DE CADA PAQUETE QUE SELECCIONES
 router.put("/removeUserId/:id", auth, packagesController.removeUserFromPackage); //OK // LE REMUEVE AL PAQUETE EL ID DEL USUARIO AL QUE LE PERTENECE
 //PEDIDO HECHO EN SERVICES DEL FRONT, FALTA APLICAR EN EL COMPONENTE
-router.delete(
-  "/:id",
-  auth,
-  isAdminMiddleware,
-  packagesController.deletePackage
-); //OK
+router.delete("/:id",auth,isAdminMiddleware,packagesController.deletePackage); //OK
 export default router;
