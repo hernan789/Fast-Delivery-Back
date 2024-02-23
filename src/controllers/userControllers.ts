@@ -196,6 +196,8 @@ const userController = {
       const users = await User.findAll({
         where: { isAdmin: false },
         attributes: ["name", "isDisabled", "isAdmin"],
+        order: [["createdAt", "DESC"]],
+        limit: 20,
       });
       res.json(users).status(200);
     } catch (error) {

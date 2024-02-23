@@ -1,5 +1,5 @@
 import request from "supertest";
-import app from "../server";
+import { app, server } from "../server";
 import db from "../src/config";
 describe("User Controller - Logout", () => {
   beforeAll(async () => {
@@ -8,8 +8,8 @@ describe("User Controller - Logout", () => {
 
   afterAll(async () => {
     await db.close();
-  })
-
+    server.close();
+  });
 
   test("should return 400 if no session is started", async () => {
     const response = await request(app).post("/api/users/logout");

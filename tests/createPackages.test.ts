@@ -1,5 +1,5 @@
 import request from "supertest";
-import app from "../server";
+import { app, server } from "../server";
 import db from "../src/config";
 import Package from "../src/models/Package";
 
@@ -18,6 +18,7 @@ describe("Test create packages", () => {
 
   afterAll(async () => {
     await db.close();
+    server.close();
   });
 
   test("api working", async () => {
@@ -84,7 +85,7 @@ describe("Test create packages", () => {
     const res = await request(app)
       .post("/api/packages")
       .send(props)
-      .set("Cookie", authToken); //usar cookie generada para auteniticar la creacion de un package
+      .set("Cookie", authToken);
     expect(res.statusCode).toBe(400);
     expect(res.body).toEqual({
       message: "Por favor, completa todos los campos",
