@@ -13,7 +13,7 @@ describe("User Controller - Register", () => {
     });
   });
 
-  beforeAll(async () => {
+  afterAll(async () => {
     await db.close();
     server.close();
   });
