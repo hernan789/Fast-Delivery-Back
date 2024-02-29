@@ -10,7 +10,7 @@ const regexPatterns: { [key: string]: RegExp } = {
 const validate = {
   email: (email: string): boolean => regexPatterns.email.test(email),
   createResetUrl: (resetToken: string) =>
-    `${process.env.MAIL_RESET_PASSWORD_URL}/reset-password/${resetToken}`,
+    `${process.env.MAIL_RESET_PASSWORD_URL}/api/reset-password/${resetToken}`,
   password: (password: string) => regexPatterns.password.test(password),
 };
 

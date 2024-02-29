@@ -56,3 +56,40 @@ Este proyecto está bajo la Licencia MIT.
 ## Estado del Proyecto
 
 Actualmente en desarrollo activo. Versión 1.0.0 lanzada el [2024-01-12].
+
+
+## Rutas API
+Las rutas de la API y sus respectivos controladores se encuentran en la carpeta `routes` y `controllers`, respectivamente.
+
+
+### Rutas de Users (`/users`)
+
+#### Admin
+- `GET /`: Obtener todos los usuarios de la aplicación.
+- `GET /:id`: Obtener los detalles de un usuario específico.
+
+#### Todos los usuarios
+- `POST /logout`: Borrar el token almacenado en la cookie y redirigir al login.
+- `GET /me`: Obtener ciertos detalles del usuario con el que se esta logeado.
+
+#### No autenticado
+- `POST /register`: Registrar un nuevo usuario.
+- `POST /login`: Iniciar sesión.
+- `POST /forgot-password`: Solicitar restablecimiento de contraseña.
+- `POST /reset-password`: Restablecer contraseña.
+
+### Rutas de Packages (`/packages`)
+
+#### Admin
+- `POST /`: Crear paquetes.
+- `DELETE /:id`: Borrar un paquete específico.
+
+#### Todos los usuarios
+- `GET /`: Obtener todos los paquetes.
+- `GET /:id`: Obtener un paquete en específico.
+- `GET /userPackages/:id`: Obtener los paquetes asociados a un usuario.
+- `PUT /assign/:id`: Elegir un paquete en específico que es asociado al usuario actual.
+- `PUT /removeUserId/:id`: Eliminar del paquete el id del usuario al que le pertenece.
+
+
+
