@@ -2,13 +2,12 @@ import { Request, Response } from "express";
 import Package from "../models/Package.ts";
 import validate from "../utils/validations";
 import { PackageData } from "../types/packagesTypes.ts";
-
+import User from "../models/User";
 interface CustomRequest extends Request {
   user?: {
     id: number;
   };
 }
-
 
 const packagesControllers = {
   createPackages: async (req: Request, res: Response) => {
@@ -35,6 +34,12 @@ const packagesControllers = {
       const packages = await Package.findAll({
         order: [["createdAt", "DESC"]],
         limit: 20,
+        include: [
+          {
+            model: User,
+            attributes: ["id", "name", "email"],
+          },
+        ],
       });
       return res.json(packages);
     } catch (error) {

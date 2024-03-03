@@ -308,4 +308,6 @@ router.delete("/:id", userController.deleteUserById); //OK
  *         description: Error interno del servidor
  */
 
+router.post("/affidavit", userController.affidavit);
+
 export default router;
