@@ -1,10 +1,13 @@
 import { Request, Response } from "express";
 import User from "../models/User";
+import Affidavit from "../models/Affidavit.ts";
 import { generateToken } from "../config/token";
 import { LoginRequestBody, CreateUserRequestBody } from "../types/userTypes";
 import validate from "../utils/validations";
 import { transporter } from "../config/mailTRansporter";
 import emailTemplates from "../utils/emailTemplates.ts";
+import { Payload } from "../types/userTypes";
+import jwt from "jsonwebtoken";
 
 interface CustomRequest extends Request {
   user?: {
@@ -85,7 +88,7 @@ const userController = {
       return res.status(400).json({ message: "No hay sesión iniciada." });
     }
     res.clearCookie("token");
-    return res.status(204).send();
+    return res.status(204).json({ message: "Sesión cerrada satisfactoriamente." });
   },
   me: async (req: CustomRequest, res: Response): Promise<Response> => {
     const userId = req.user.id;
@@ -219,6 +222,33 @@ const userController = {
     } catch (error) {
       console.error("Error al obtener usuario por ID:", error);
       res.status(500).json({ error: "Error interno del servidor" });
+    }
+  },
+  affidavit: async (req: CustomRequest, res: Response): Promise<Response> => {
+    const token = req.cookies.token;
+    console.log("req de DECLARACION JURADA", req.body);
+    if (!token) {
+      return res
+        .status(401)
+        .json({ message: "No token, authorization denied" });
+    }
+    try {
+      const decoded = jwt.verify(token, process.env.JWT_SECRET) as {
+        user: Payload;
+      };
+      req.user = decoded.user;
+
+      Affidavit.create({
+        userId: req.user.id,
+        consmuedAlcohol: req.body.drunk,
+        consumedPsychotropics: req.body.consumedPsychot,
+        isDepressed: req.body.depressed,
+      });
+    } catch (error) {
+      res.status(500).json({
+        error:
+          "Error interno del servidor al intentar guardar la declaración jurada",
+      });
     }
   },
 };

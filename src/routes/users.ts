@@ -10,6 +10,7 @@ router.post("/login", userController.login); //OK
 router.post("/forgot-password", userController.mailForgotPassword);//OK
 router.post("/reset-password", userController.mailResetPassword);
 router.post("/logout", auth, userController.logout); //OK
+router.post("/affidavit", userController.affidavit);
 router.get("/me", auth, userController.me)//OK
 router.get("/", auth, isAdminMiddleware, userController.getAllUsers)//OK
 router.get("/:id", auth, isAdminMiddleware, userController.getUserById)//OK

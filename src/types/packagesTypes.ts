@@ -6,3 +6,4 @@ export interface PackageData {
   weight: number;
   date: Date;
 }
+
