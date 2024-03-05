@@ -175,6 +175,7 @@ router.post("/logout", auth, userController.logout); //OK
  *       500:
  *         description: Error interno del servidor
  */
+router.post("/affidavit", userController.affidavit);
 router.get("/me", auth, userController.me); //OK
 /**
  * @swagger
@@ -308,6 +309,6 @@ router.delete("/:id", userController.deleteUserById); //OK
  *         description: Error interno del servidor
  */
 
-router.post("/affidavit", userController.affidavit);
+
 
 export default router;

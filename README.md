@@ -90,6 +90,7 @@ Las rutas de la API y sus respectivos controladores se encuentran en la carpeta 
 - `GET /userPackages/:id`: Obtener los paquetes asociados a un usuario.
 - `PUT /assign/:id`: Elegir un paquete en específico que es asociado al usuario actual.
 - `PUT /removeUserId/:id`: Eliminar del paquete el id del usuario al que le pertenece.
+- `PUT /updateToOngoing/:id`: Cambiar el estado de un paquete de "PENDIENTE" a "EN CURSO".
 
 
 

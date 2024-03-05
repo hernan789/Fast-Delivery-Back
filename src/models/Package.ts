@@ -1,11 +1,11 @@
 import S from "sequelize";
 import db from "../config/index";
 
-enum PackageStatus {
-  DELIVERED = "delivered",
-  CANCELLED = "cancelled",
-  PENDING = "pending",
-  ONGOING = "ongoing"
+export enum PackageStatus {
+  DELIVERED = "ENTREGADO",
+  CANCELLED = "CANCELADO",
+  PENDING = "PENDIENTE",
+  ONGOING = "EN CURSO"
 }
 
 class Package extends S.Model {

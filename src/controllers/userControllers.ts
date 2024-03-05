@@ -88,9 +88,7 @@ const userController = {
       return res.status(400).json({ message: "No hay sesión iniciada." });
     }
     res.clearCookie("token");
-    return res
-      .status(200)
-      .json({ message: "Sesión cerrada satisfactoriamente." });
+    return res.status(204).json({ message: "Sesión cerrada satisfactoriamente." });
   },
   me: async (req: CustomRequest, res: Response): Promise<Response> => {
     const userId = req.user.id;

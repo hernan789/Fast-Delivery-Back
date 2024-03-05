@@ -100,8 +100,7 @@ router.get("/", auth, packagesController.getAllPackages); //OK //SE MUESTRAN EN 
  *         description: Error interno del servidor
  */
 
-// FALTA HACER ESTADO DE REDUX PARA MOVER LOS PAQUETES ENTRE VISTAS SEGUN SU ESTADO
-router.get("/:id", auth, packagesController.getPackageById); //OK
+// router.get("/:id", auth, packagesController.getPackageById); //OK
 /**
  * @swagger
  * /api/packages/{id}:
@@ -143,7 +142,7 @@ router.get("/:id", auth, packagesController.getPackageById); //OK
  *         description: Error interno del servidor
  */
 
-router.get("/userPackages/:id", auth, packagesController.getUserPackages); //OK
+router.get("/userPackages", auth, packagesController.getUserPackages); //OK// YA APLICADA EN FRONT
 /**
  * @swagger
  * /api/packages/userPackages/{id}:
@@ -185,7 +184,7 @@ router.get("/userPackages/:id", auth, packagesController.getUserPackages); //OK
  *         description: Error interno del servidor
  */
 
-router.put("/assign/:id", auth, packagesController.assignPackage); //OK // SE ASIGNA EL ID DEL USUARIO LOGEADO
+router.put("/assign/:id", auth, packagesController.assignPackage); //OK // YA APLICADO EN FRONT// SE ASIGNA EL ID DEL USUARIO LOGEADO
 /**
  * @swagger
  * /api/packages/assign/{id}:
@@ -256,6 +255,7 @@ router.put("/removeUserId/:id", auth, packagesController.removeUserFromPackage);
  *       500:
  *         description: Error interno del servidor
  */
+router.put("/updateToOngoing/:id", auth, packagesController.updatePackageStatusToOngoing)//OK// YA APLICADA EN FRONT
 
 router.delete(
   "/:id",

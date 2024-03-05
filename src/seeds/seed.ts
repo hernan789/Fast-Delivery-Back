@@ -103,6 +103,34 @@ export const packages = [
     client: "Justina",
     weight: 2,
   },
+  {
+    trackId: "#OA555",
+    address: "Amenabar 2100, CABA",
+    client: "Juan",
+    weight: 5,
+    status: "ENTREGADO"
+  },
+  {
+    trackId: "#O333",
+    address: "Amenabar 2100, CABA",
+    client: "Juan",
+    weight: 5,
+    status: "EN CURSO"
+  },
+  {
+    trackId: "#OA444",
+    address: "Amenabar 2100, CABA",
+    client: "Juan",
+    weight: 5,
+    status: "ENTREGADO"
+  },
+  {
+    trackId: "#O222",
+    address: "Amenabar 2100, CABA",
+    client: "Juan",
+    weight: 5,
+    status: "EN CURSO"
+  },
 ];
 
 
