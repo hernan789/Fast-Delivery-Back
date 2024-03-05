@@ -313,5 +313,5 @@ router.post("/affidavit", userController.affidavit);
 router.get("/profile-image", auth, userController.getProfileImage);
 router.post("/profile-image", auth, userController.postProfileImage);
 router.put("/profile-image", auth, userController.deleteProfileImage);
-
+router.put("/state", auth, userController.updateState);
 export default router;
