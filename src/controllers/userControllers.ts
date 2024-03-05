@@ -88,7 +88,9 @@ const userController = {
       return res.status(400).json({ message: "No hay sesión iniciada." });
     }
     res.clearCookie("token");
-    return res.status(204).json({ message: "Sesión cerrada satisfactoriamente." });
+    return res
+      .status(204)
+      .json({ message: "Sesión cerrada satisfactoriamente." });
   },
   me: async (req: CustomRequest, res: Response): Promise<Response> => {
     const userId = req.user.id;
@@ -261,7 +263,7 @@ const userController = {
   },
   affidavit: async (req: CustomRequest, res: Response): Promise<Response> => {
     const token = req.cookies.token;
-    console.log("req de DECLARACION JURADA", req.body);
+
     if (!token) {
       return res
         .status(401)
@@ -354,6 +356,40 @@ const userController = {
       return res.status(500).json({ error: "Error interno del servidor" });
     }
   },
+
+  updateUser: async (req: Request, res: Response) => {
+    // const userId: string = req.params.id; //PARA CUANDO ESTÉ EL ESTADO REDUX.
+    const token = req.cookies.token;
+
+    if (!token) {
+      return res
+        .status(401)
+        .json({ message: "No token, authorization denied" });
+    }
+    try {
+      const decoded = jwt.verify(token, process.env.JWT_SECRET) as {
+        user: Payload;
+      };
+      const userId = decoded.user;
+
+      const [rowsAffected] = await User.update(
+        { isDisabled: true },
+        {
+          where: { id: userId },
+        }
+      );
+
+      if (rowsAffected === 0) {
+        return res.status(404).json({ error: "Usuario no encontrado" });
+      }
+
+      res.json({ message: "Usuario actualizado correctamente" });
+    } catch (error) {
+      console.error("Error al actualizar usuario:", error);
+      res.status(500).json({ error: "Error interno del servidor" });
+    }
+  },
+
   updateState: async (req:CustomRequest,res:Response) =>{
     try{
       const { driverId, isDisabled} = req.body;
@@ -377,6 +413,7 @@ const userController = {
       return res.status(500).json({ error: "Error interno del servidor" });
     }
   }
+
 };
 
 export default userController;
