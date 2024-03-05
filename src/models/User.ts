@@ -3,7 +3,6 @@ const bcrypt = require("bcrypt");
 import db from "../config/index";
 
 class User extends S.Model {
-
   declare name: string;
   declare surname: string;
   declare email: string;
@@ -12,6 +11,7 @@ class User extends S.Model {
   declare isDisabled: boolean;
   declare salt: string;
   declare resetPasswordToken: string | null;
+  declare profieImage: string;
 
   // resetPasswordExpires: Date | null;
   // declare picture: string;
@@ -61,6 +61,10 @@ User.init(
     resetPasswordToken: {
       type: S.STRING,
       allowNull: true,
+    },
+    profileImage: {
+      type: S.TEXT,
+      defaultValue: "",
     },
   },
   { sequelize: db, modelName: "users" }

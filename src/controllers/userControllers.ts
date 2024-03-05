@@ -98,15 +98,17 @@ const userController = {
     try {
       const user = await User.findOne({
         where: { id: userId },
-        attributes: ["name", "surname", "email", "isAdmin"],
+        attributes: ["name", "surname", "email", "isAdmin", "profileImage"],
       });
       if (!user) {
         return res.status(404).json({ message: "Usuario no encontrado." });
       }
-      return res.json({
-        id: userId,
-        ...user.get({ plain: true }),
-      });
+      return res
+        .json({
+          id: userId,
+          ...user.get({ plain: true }),
+        })
+        .status(200);
     } catch (error) {
       console.error(error);
       return res.status(500).send("Error de servidor");
@@ -266,6 +268,76 @@ const userController = {
         error:
           "Error interno del servidor al intentar guardar la declaración jurada",
       });
+    }
+  },
+  getProfileImage: async (req: CustomRequest, res: Response) => {
+    try {
+      const user = await User.findAll({
+        where: { id: req.user.id },
+        attributes: ["profileImage"],
+      });
+      res.json(user).status(200);
+    } catch (error) {
+      console.error("Error al obtener usuario:", error);
+      res.status(500).json({ error: "Error interno del servidor" });
+    }
+  },
+  postProfileImage: async (req: CustomRequest, res: Response) => {
+    try {
+      const { id } = req.user;
+      const { profileImage } = req.body;
+
+      // Verificar que se proporciona una cadena Base64
+      if (!profileImage) {
+        return res.status(400).json({
+          error:
+            "La cadena Base64 de la imagen es requerida en el cuerpo de la solicitud",
+        });
+      }
+
+      // Actualizar la imagen de perfil en la base de datos
+      const [updateCount] = await User.update(
+        { profileImage: profileImage },
+        { where: { id } }
+      );
+
+      if (updateCount > 0) {
+        return res
+          .status(200)
+          .json({ message: "Se actualizó la imagen de perfil correctamente" });
+      } else {
+        return res.status(404).json({
+          error: "Usuario no encontrado o la imagen no pudo ser actualizada",
+        });
+      }
+    } catch (error) {
+      console.error("Error al actualizar la imagen de perfil:", error);
+      return res.status(500).json({ error: "Error interno del servidor" });
+    }
+  },
+  deleteProfileImage: async (req: CustomRequest, res: Response) => {
+    try {
+      const { id } = req.user;
+      const { profileImage } = req.body;
+
+      // Actualizar la imagen de perfil en la base de datos
+      const [updateCount] = await User.update(
+        { profileImage: "" },
+        { where: { id } }
+      );
+
+      if (updateCount > 0) {
+        return res
+          .status(200)
+          .json({ message: "Se eliminó la imagen de perfil correctamente" });
+      } else {
+        return res.status(404).json({
+          error: "Usuario no encontrado o la imagen no pudo ser eliminada",
+        });
+      }
+    } catch (error) {
+      console.error("Error al eliminar la imagen de perfil:", error);
+      return res.status(500).json({ error: "Error interno del servidor" });
     }
   },
 };
