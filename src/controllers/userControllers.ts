@@ -100,7 +100,14 @@ const userController = {
     try {
       const user = await User.findOne({
         where: { id: userId },
-        attributes: ["name", "surname", "email", "isAdmin", "profileImage"],
+        attributes: [
+          "name",
+          "surname",
+          "email",
+          "isAdmin",
+          "isDisabled",
+          "profileImage",
+        ],
       });
       if (!user) {
         return res.status(404).json({ message: "Usuario no encontrado." });
@@ -219,7 +226,16 @@ const userController = {
     try {
       const users = await User.findAll({
         where: { isAdmin: false },
-        attributes: ["id", "name", "isDisabled", "isAdmin"],
+        attributes: [
+          "id",
+          "name",
+          "surname",
+          "isDisabled",
+          "isAdmin",
+          "email",
+          "isDisabled",
+          "profileImage",
+        ],
         order: [["createdAt", "DESC"]],
         limit: 20,
       });
@@ -286,8 +302,7 @@ const userController = {
   },
   postProfileImage: async (req: CustomRequest, res: Response) => {
     try {
-      const { id } = req.user;
-      const { profileImage } = req.body;
+      const { profileImage, driverId } = req.body;
 
       // Verificar que se proporciona una cadena Base64
       if (!profileImage) {
@@ -300,7 +315,7 @@ const userController = {
       // Actualizar la imagen de perfil en la base de datos
       const [updateCount] = await User.update(
         { profileImage: profileImage },
-        { where: { id } }
+        { where: { id: driverId } }
       );
 
       if (updateCount > 0) {
@@ -319,13 +334,12 @@ const userController = {
   },
   deleteProfileImage: async (req: CustomRequest, res: Response) => {
     try {
-      const { id } = req.user;
-      const { profileImage } = req.body;
+      const { driverId } = req.body;
 
       // Actualizar la imagen de perfil en la base de datos
       const [updateCount] = await User.update(
         { profileImage: "" },
-        { where: { id } }
+        { where: { id: driverId } }
       );
 
       if (updateCount > 0) {
@@ -342,6 +356,7 @@ const userController = {
       return res.status(500).json({ error: "Error interno del servidor" });
     }
   },
+
   updateUser: async (req: Request, res: Response) => {
     // const userId: string = req.params.id; //PARA CUANDO ESTÉ EL ESTADO REDUX.
     const token = req.cookies.token;
@@ -374,6 +389,31 @@ const userController = {
       res.status(500).json({ error: "Error interno del servidor" });
     }
   },
+
+  updateState: async (req:CustomRequest,res:Response) =>{
+    try{
+      const { driverId, isDisabled} = req.body;
+
+      const [updateCount] = await User.update(
+        { isDisabled },
+        { where: { id: driverId } }
+      );
+
+      if (updateCount > 0) {
+        return res
+          .status(200)
+          .json({ message: "Se actualizó el estado del repartidor correctamente" });
+      } else {
+        return res.status(404).json({
+          error: "Usuario no encontrado o el estado no pudo cambiar",
+        });
+      }
+    } catch (error) {
+      console.error("Error al cambiar el estado del repartidor:", error);
+      return res.status(500).json({ error: "Error interno del servidor" });
+    }
+  }
+
 };
 
 export default userController;
