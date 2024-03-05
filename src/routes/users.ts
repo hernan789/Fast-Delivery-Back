@@ -309,10 +309,8 @@ router.delete("/:id", userController.deleteUserById); //OK
  *         description: Error interno del servidor
  */
 
-
-
 router.get("/profile-image", auth, userController.getProfileImage);
 router.post("/profile-image", auth, userController.postProfileImage);
 router.put("/profile-image", auth, userController.deleteProfileImage);
-
+router.put("/update", auth, userController.updateUser);
 export default router;

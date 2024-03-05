@@ -6,6 +6,7 @@ export const users = [
     surname: "Robledo",
     email: "luisrobledo@gmail.com",
     password: "Luis1234",
+    isDisabled: true,
   },
   {
     name: "Hernan",
@@ -38,7 +39,7 @@ export const users = [
     email: "admin@gmail.com",
     password: "Admin1234",
     isAdmin: true,
-  }
+  },
 ];
 
 export const packages = [
@@ -47,7 +48,6 @@ export const packages = [
     address: "Amenabar 2100, CABA",
     client: "Juan",
     weight: 5,
-    
   },
   {
     trackId: "#OH216",
@@ -90,6 +90,8 @@ export const packages = [
     address: "Lavalle 830, CABA",
     client: "Franco",
     weight: 3,
+    status: "ENTREGADO",
+    userId: 1,
   },
   {
     trackId: "#OG315",
@@ -102,35 +104,39 @@ export const packages = [
     address: "Lacroze 1520, CABA",
     client: "Justina",
     weight: 2,
+    status: "PENDIENTE",
+    userId: 3,
   },
   {
     trackId: "#OA555",
     address: "Amenabar 2100, CABA",
     client: "Juan",
     weight: 5,
-    status: "ENTREGADO"
+    status: "ENTREGADO",
+    userId: 2,
   },
   {
     trackId: "#O333",
     address: "Amenabar 2100, CABA",
     client: "Juan",
     weight: 5,
-    status: "EN CURSO"
+    status: "EN CURSO",
+    userId: 4,
   },
   {
     trackId: "#OA444",
     address: "Amenabar 2100, CABA",
     client: "Juan",
     weight: 5,
-    status: "ENTREGADO"
+    status: "ENTREGADO",
+    userId: 4,
   },
   {
     trackId: "#O222",
     address: "Amenabar 2100, CABA",
     client: "Juan",
     weight: 5,
-    status: "EN CURSO"
+    status: "EN CURSO",
+    userId: 1,
   },
 ];
-
-
