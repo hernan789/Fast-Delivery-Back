@@ -310,4 +310,8 @@ router.delete("/:id", userController.deleteUserById); //OK
 
 router.post("/affidavit", userController.affidavit);
 
+router.get("/profile-image", auth, userController.getProfileImage);
+router.post("/profile-image", auth, userController.postProfileImage);
+router.put("/profile-image", auth, userController.deleteProfileImage);
+
 export default router;
