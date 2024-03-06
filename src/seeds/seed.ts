@@ -105,7 +105,7 @@ export const packages = [
   },
   {
     trackId: "#OA555",
-    address: "Amenabar 2100, CABA",
+    address: "Entregado 2100, CABA",
     client: "Juan",
     weight: 5,
     status: "ENTREGADO"
@@ -115,11 +115,10 @@ export const packages = [
     address: "Amenabar 2100, CABA",
     client: "Juan",
     weight: 5,
-    status: "EN CURSO"
   },
   {
     trackId: "#OA444",
-    address: "Amenabar 2100, CABA",
+    address: "Entregado 2100, CABA",
     client: "Juan",
     weight: 5,
     status: "ENTREGADO"
@@ -129,7 +128,20 @@ export const packages = [
     address: "Amenabar 2100, CABA",
     client: "Juan",
     weight: 5,
-    status: "EN CURSO"
+  },
+  {
+    trackId: "#OA777",
+    address: "Entregado 2100, CABA",
+    client: "Juan",
+    weight: 5,
+    status: "ENTREGADO"
+  },
+  {
+    trackId: "#OA999",
+    address: "Entregado 2100, CABA",
+    client: "Juan",
+    weight: 5,
+    status: "ENTREGADO"
   },
 ];
 
