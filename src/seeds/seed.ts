@@ -109,7 +109,7 @@ export const packages = [
   },
   {
     trackId: "#OA555",
-    address: "Amenabar 2100, CABA",
+    address: "Entregado 2100, CABA",
     client: "Juan",
     weight: 5,
     status: "ENTREGADO",
@@ -120,12 +120,10 @@ export const packages = [
     address: "Amenabar 2100, CABA",
     client: "Juan",
     weight: 5,
-    status: "EN CURSO",
-    userId: 4,
   },
   {
     trackId: "#OA444",
-    address: "Amenabar 2100, CABA",
+    address: "Entregado 2100, CABA",
     client: "Juan",
     weight: 5,
     status: "ENTREGADO",
@@ -136,7 +134,49 @@ export const packages = [
     address: "Amenabar 2100, CABA",
     client: "Juan",
     weight: 5,
-    status: "EN CURSO",
+  },
+  {
+    trackId: "#OA777",
+    address: "Entregado 2100, CABA",
+    client: "Juan",
+    weight: 5,
+    status: "ENTREGADO"
+  },
+  {
+    trackId: "#OA999",
+    address: "Entregado 2100, CABA",
+    client: "Juan",
+    weight: 5,
+    status: "ENTREGADO"
+  },
+  {
+    trackId: "#OG307",
+    address: "Lavalle 830, CABA",
+    client: "Franco",
+    weight: 3,
+    status: "ENTREGADO",
     userId: 1,
   },
+  {
+    trackId: "#OG302",
+    address: "Lavalle 830, CABA",
+    client: "Franco",
+    weight: 3,
+    status: "ENTREGADO",
+    userId: 1,
+  },
+  {
+    trackId: "#OG302",
+    address: "cancelado 830, CABA",
+    client: "Sofía",
+    weight: 3,
+    status: "CANCELADO",
+  },  {
+    trackId: "#OG302",
+    address: "cancelado 830, CABA",
+    client: "Franco",
+    weight: 3,
+    status: "CANCELADO",
+  },
+
 ];

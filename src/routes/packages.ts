@@ -100,7 +100,8 @@ router.get("/", auth, packagesController.getAllPackages); //OK //SE MUESTRAN EN 
  *         description: Error interno del servidor
  */
 
-// router.get("/:id", auth, packagesController.getPackageById); //OK
+router.get("/userPackages", auth, packagesController.getUserPackages); //OK// YA APLICADA EN FRONT
+
 /**
  * @swagger
  * /api/packages/{id}:
@@ -142,7 +143,7 @@ router.get("/", auth, packagesController.getAllPackages); //OK //SE MUESTRAN EN 
  *         description: Error interno del servidor
  */
 
-router.get("/userPackages", auth, packagesController.getUserPackages); //OK// YA APLICADA EN FRONT
+router.get("/:id", auth, packagesController.getPackageById); //OK
 /**
  * @swagger
  * /api/packages/userPackages/{id}:
@@ -256,6 +257,8 @@ router.put("/removeUserId/:id", auth, packagesController.removeUserFromPackage);
  *         description: Error interno del servidor
  */
 router.put("/updateToOngoing/:id", auth, packagesController.updatePackageStatusToOngoing)//OK// YA APLICADA EN FRONT
+router.put("/updateToDelivered/:id", auth, packagesController.updatePackageStatusToDelivered)//OK// YA APLICADA EN FRONT
+router.put("/updateToCancelled/:id", auth, packagesController.updatePackageStatusToCancelled)//OK// YA APLICADA EN FRONT
 
 router.delete(
   "/:id",
