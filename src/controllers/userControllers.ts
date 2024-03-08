@@ -88,7 +88,9 @@ const userController = {
       return res.status(400).json({ message: "No hay sesión iniciada." });
     }
     res.clearCookie("token");
-    return res.status(204).json({ message: "Sesión cerrada satisfactoriamente." });
+    return res
+      .status(204)
+      .json({ message: "Sesión cerrada satisfactoriamente." });
   },
   me: async (req: CustomRequest, res: Response): Promise<Response> => {
     const userId = req.user.id;
@@ -98,7 +100,14 @@ const userController = {
     try {
       const user = await User.findOne({
         where: { id: userId },
-        attributes: ["name", "surname", "email", "isAdmin", "profileImage"],
+        attributes: [
+          "name",
+          "surname",
+          "email",
+          "isAdmin",
+          "isDisabled",
+          "profileImage",
+        ],
       });
       if (!user) {
         return res.status(404).json({ message: "Usuario no encontrado." });
@@ -150,51 +159,54 @@ const userController = {
       res.status(500).json(error);
     }
   },
-  mailResetPassword: async (req: Request, res: Response): Promise<Response> => {
-    const { token, newPassword } = req.body;
-    if (!token) {
-      return res.status(400).json({ message: "Se requiere un token." });
-    }
-    if (!newPassword) {
-      return res
-        .status(400)
-        .json({ message: "Se requiere ingresar una nueva contraseña." });
-    }
-    if (!validate.password(newPassword)) {
-      return res.status(400).json({
-        message:
-          "La nueva contraseña no cumple con los requisitos mínimos:\n" +
-          "✓ Solo letras y números.\n" +
-          "✓ 1 letra mayúscula.\n" +
-          "✓ 1 letra minúscula.\n" +
-          "✓ 1 número.\n" +
-          "✓ 8 caracteres de largo.",
-      });
-    }
-    try {
-      const user = await User.findOne({
-        where: {
-          resetPasswordToken: token,
-        },
-      });
-      if (!user) {
-        return res.status(400).json({ message: "Token inválido o expirado." });
-      }
-      const hashedPassword = await user.hash(
-        newPassword,
-        user.getDataValue("salt")
-      );
-      user.password = hashedPassword;
-      user.resetPasswordToken = null;
-      await user.save();
-      const confirmMailOptions = emailTemplates.resetPasswordConfirmation(user);
-      await transporter.sendMail(confirmMailOptions);
-      res.json({ message: "Contraseña actualizada con éxito." });
-    } catch (error) {
-      console.error(error);
-      res.status(500).json(error);
-    }
-  },
+
+  // mailResetPassword: async (req: Request, res: Response): Promise<Response> => {
+  //   const { token, newPassword } = req.body;
+  //   if (!token) {
+  //     return res.status(400).json({ message: "Se requiere un token." });
+  //   }
+  //   if (!newPassword) {
+  //     return res
+  //       .status(400)
+  //       .json({ message: "Se requiere ingresar una nueva contraseña." });
+  //   }
+  //   if (!validate.password(newPassword)) {
+  //     return res.status(400).json({
+  //       message:
+  //         "La nueva contraseña no cumple con los requisitos mínimos:\n" +
+  //         "✓ Solo letras y números.\n" +
+  //         "✓ 1 letra mayúscula.\n" +
+  //         "✓ 1 letra minúscula.\n" +
+  //         "✓ 1 número.\n" +
+  //         "✓ 8 caracteres de largo.",
+  //     });
+  //   }
+  //   try {
+  //     const user = await User.findOne({
+  //       where: {
+  //         resetPasswordToken: token,
+  //       },
+  //     });
+  //     if (!user) {
+  //       return res.status(400).json({ message: "Token inválido o expirado." });
+  //     }
+  //     const hashedPassword = await user.hash(
+  //       newPassword,
+  //       user.getDataValue("salt")
+  //     );
+  //     user.password = hashedPassword;
+  //     user.resetPasswordToken = null;
+  //     await user.save();
+  //     const confirmMailOptions = emailTemplates.resetPasswordConfirmation(user);
+  //     await transporter.sendMail(confirmMailOptions);
+  //     res.json({ message: "Contraseña actualizada con éxito." });
+  //   } catch (error) {
+  //     console.error(error);
+  //     res.status(500).json(error);
+  //   }
+  // },
+
+
   deleteUserById: async (req: Request, res: Response): Promise<Response> => {
     const { id } = req.params;
     if (!id || isNaN(parseInt(id))) {
@@ -217,7 +229,16 @@ const userController = {
     try {
       const users = await User.findAll({
         where: { isAdmin: false },
-        attributes: ["id", "name", "isDisabled", "isAdmin"],
+        attributes: [
+          "id",
+          "name",
+          "surname",
+          "isDisabled",
+          "isAdmin",
+          "email",
+          "isDisabled",
+          "profileImage",
+        ],
         order: [["createdAt", "DESC"]],
         limit: 20,
       });
@@ -245,7 +266,7 @@ const userController = {
   },
   affidavit: async (req: CustomRequest, res: Response): Promise<Response> => {
     const token = req.cookies.token;
-    console.log("req de DECLARACION JURADA", req.body);
+
     if (!token) {
       return res
         .status(401)
@@ -284,8 +305,7 @@ const userController = {
   },
   postProfileImage: async (req: CustomRequest, res: Response) => {
     try {
-      const { id } = req.user;
-      const { profileImage } = req.body;
+      const { profileImage, driverId } = req.body;
 
       // Verificar que se proporciona una cadena Base64
       if (!profileImage) {
@@ -298,7 +318,7 @@ const userController = {
       // Actualizar la imagen de perfil en la base de datos
       const [updateCount] = await User.update(
         { profileImage: profileImage },
-        { where: { id } }
+        { where: { id: driverId } }
       );
 
       if (updateCount > 0) {
@@ -317,13 +337,12 @@ const userController = {
   },
   deleteProfileImage: async (req: CustomRequest, res: Response) => {
     try {
-      const { id } = req.user;
-      const { profileImage } = req.body;
+      const { driverId } = req.body;
 
       // Actualizar la imagen de perfil en la base de datos
       const [updateCount] = await User.update(
         { profileImage: "" },
-        { where: { id } }
+        { where: { id: driverId } }
       );
 
       if (updateCount > 0) {
@@ -340,6 +359,64 @@ const userController = {
       return res.status(500).json({ error: "Error interno del servidor" });
     }
   },
+
+  updateUser: async (req: Request, res: Response) => {
+    // const userId: string = req.params.id; //PARA CUANDO ESTÉ EL ESTADO REDUX.
+    const token = req.cookies.token;
+
+    if (!token) {
+      return res
+        .status(401)
+        .json({ message: "No token, authorization denied" });
+    }
+    try {
+      const decoded = jwt.verify(token, process.env.JWT_SECRET) as {
+        user: Payload;
+      };
+      const userId = decoded.user;
+
+      const [rowsAffected] = await User.update(
+        { isDisabled: true },
+        {
+          where: { id: userId },
+        }
+      );
+
+      if (rowsAffected === 0) {
+        return res.status(404).json({ error: "Usuario no encontrado" });
+      }
+
+      res.json({ message: "Usuario actualizado correctamente" });
+    } catch (error) {
+      console.error("Error al actualizar usuario:", error);
+      res.status(500).json({ error: "Error interno del servidor" });
+    }
+  },
+
+  updateState: async (req:CustomRequest,res:Response) =>{
+    try{
+      const { driverId, isDisabled} = req.body;
+
+      const [updateCount] = await User.update(
+        { isDisabled },
+        { where: { id: driverId } }
+      );
+
+      if (updateCount > 0) {
+        return res
+          .status(200)
+          .json({ message: "Se actualizó el estado del repartidor correctamente" });
+      } else {
+        return res.status(404).json({
+          error: "Usuario no encontrado o el estado no pudo cambiar",
+        });
+      }
+    } catch (error) {
+      console.error("Error al cambiar el estado del repartidor:", error);
+      return res.status(500).json({ error: "Error interno del servidor" });
+    }
+  }
+
 };
 
 export default userController;
