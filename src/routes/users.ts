@@ -130,7 +130,7 @@ router.post("/forgot-password", userController.mailForgotPassword); //OK
  */
 
 
-// router.post("/reset-password", userController.mailResetPassword);
+router.post("/reset-password", userController.mailResetPassword);
 
 
 /**
