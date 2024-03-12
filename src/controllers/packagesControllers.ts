@@ -52,19 +52,22 @@ const packagesControllers = {
       return res.status(500).json({ error: "Error interno del servidor" });
     }
   },
-  // getPackageById: async (req: Request, res: Response) => {
-  //   try {
-  //     const { id } = req.params;
-  //     const packageId = parseInt(id);
-  //     const packageItem = await Package.findByPk(packageId);
-  //     if (!packageItem)
-  //       return res.status(404).json({ message: "Paquete no encontrado" });
-  //     return res.json(packageItem);
-  //   } catch (error) {
-  //     console.error("Error al obtener el paquete:", error);
-  //     return res.status(500).json({ error: "Error interno del servidor" });
-  //   }
-  // },
+  getPackageById: async (req: Request, res: Response) => {
+    try {
+      const { id } = req.params;
+      const packageId = parseInt(id);
+      if (isNaN(packageId)) {
+        return res.status(400).json({ error: "El ID del paquete no es válido" });
+      }
+      const packageItem = await Package.findByPk(packageId);
+      if (!packageItem)
+        return res.status(404).json({ message: "Paquete no encontrado" });
+      return res.json(packageItem);
+    } catch (error) {
+      console.error("Error al obtener el paquete:", error);
+      return res.status(500).json({ error: "Error interno del servidor" });
+    }
+  },
   getUserPackages: async (req: CustomRequest, res: Response) => {
     const userId = req.user.id;
     try {
@@ -148,6 +151,27 @@ const packagesControllers = {
           .status(400)
           .json({ message: "El paquete no está pendiente" });
       packageItem.status = PackageStatus.ONGOING;
+      await packageItem.save();
+      return res
+        .status(200)
+        .json({ message: "Estado del paquete actualizado correctamente" });
+    } catch (error) {
+      console.error("Error al actualizar el estado del paquete:", error);
+      return res.status(500).json({ error: "Error interno del servidor" });
+    }
+  },
+  updatePackageStatusToDelivered: async (req: CustomRequest, res: Response) => {
+    const { id } = req.params;
+    try {
+      const packageItem = await Package.findByPk(id);
+      if (!packageItem)
+        return res.status(404).json({ message: "Paquete no encontrado" });
+      if (packageItem.status !== "EN CURSO")
+
+        return res
+          .status(400)
+          .json({ message: "El paquete no está en curso" });
+      packageItem.status = PackageStatus.DELIVERED;
       await packageItem.save();
       return res
         .status(200)

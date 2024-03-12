@@ -14,7 +14,6 @@ class User extends S.Model {
   declare profieImage: string;
 
   // resetPasswordExpires: Date | null;
-  // declare picture: string;
 
   public hash(password: string, salt: string): Promise<string> {
     return bcrypt.hash(password, salt);
