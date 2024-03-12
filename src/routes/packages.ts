@@ -255,7 +255,17 @@ router.put("/removeUserId/:id", auth, packagesController.removeUserFromPackage);
  *       500:
  *         description: Error interno del servidor
  */
-router.put("/updateToOngoing/:id", auth, packagesController.updatePackageStatusToOngoing)//OK// YA APLICADA EN FRONT
+router.put(
+  "/updateToOngoing/:id",
+  auth,
+  packagesController.updatePackageStatusToOngoing
+); //OK// YA APLICADA EN FRONT
+
+router.put(
+  "/updateToCancelled/:id",
+  auth,
+  packagesController.updatePackageStatusToCancelled
+); //OK// YA APLICADA EN FRONT
 
 router.delete(
   "/:id",
@@ -295,5 +305,10 @@ router.delete(
  *       500:
  *         description: Error interno del servidor
  */
-
+router.get(
+  "/userPackagesById/:id",
+  auth,
+  packagesController.getUserPackagesById
+);
+//pendiente ruta para actualizar estado del paquete desde el admin
 export default router;

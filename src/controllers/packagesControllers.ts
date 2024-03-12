@@ -10,6 +10,10 @@ interface CustomRequest extends Request {
   };
 }
 
+interface CustomRequest2 extends Request {
+  id?: string;
+}
+
 const packagesControllers = {
   createPackages: async (req: Request, res: Response) => {
     try {
@@ -63,6 +67,16 @@ const packagesControllers = {
   // },
   getUserPackages: async (req: CustomRequest, res: Response) => {
     const userId = req.user.id;
+    try {
+      const userPackages = await Package.findAll({ where: { userId } });
+      return res.status(200).json(userPackages);
+    } catch (error) {
+      console.error("Error al obtener los paquetes del usuario:", error);
+      return res.status(500).json({ error: "Error interno del servidor" });
+    }
+  },
+  getUserPackagesById: async (req: CustomRequest, res: Response) => {
+    const userId = req.params.id;
     try {
       const userPackages = await Package.findAll({ where: { userId } });
       return res.status(200).json(userPackages);
@@ -134,6 +148,24 @@ const packagesControllers = {
           .status(400)
           .json({ message: "El paquete no está pendiente" });
       packageItem.status = PackageStatus.ONGOING;
+      await packageItem.save();
+      return res
+        .status(200)
+        .json({ message: "Estado del paquete actualizado correctamente" });
+    } catch (error) {
+      console.error("Error al actualizar el estado del paquete:", error);
+      return res.status(500).json({ error: "Error interno del servidor" });
+    }
+  },
+  updatePackageStatusToCancelled: async (req: CustomRequest, res: Response) => {
+    const { id } = req.params;
+    try {
+      const packageItem = await Package.findByPk(id);
+      if (!packageItem)
+        return res.status(404).json({ message: "Paquete no encontrado" });
+      if (packageItem.status !== "EN CURSO")
+        return res.status(400).json({ message: "El paquete no está en curso" });
+      packageItem.status = PackageStatus.CANCELLED;
       await packageItem.save();
       return res
         .status(200)
