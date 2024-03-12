@@ -13,7 +13,7 @@ class User extends S.Model {
   declare resetPasswordToken: string | null;
   declare profieImage: string;
 
-  // resetPasswordExpires: Date | null;
+  declare resetPasswordExpires: Date | null;
 
   public hash(password: string, salt: string): Promise<string> {
     return bcrypt.hash(password, salt);
@@ -59,6 +59,10 @@ User.init(
     },
     resetPasswordToken: {
       type: S.STRING,
+      allowNull: true,
+    },
+    resetPasswordExpires: {
+      type: S.DATE,
       allowNull: true,
     },
     profileImage: {

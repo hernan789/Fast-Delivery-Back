@@ -8,6 +8,7 @@ import { transporter } from "../config/mailTRansporter";
 import emailTemplates from "../utils/emailTemplates.ts";
 import { Payload } from "../types/userTypes";
 import jwt from "jsonwebtoken";
+import Sequelize from "sequelize";
 
 interface CustomRequest extends Request {
   user?: {
@@ -146,7 +147,12 @@ const userController = {
         id: userToJson.id,
         isAdmin: userToJson.isAdmin,
       });
-      userToJson.resetPasswordToken = resetToken;
+      user.resetPasswordToken = resetToken;
+      const expirationDate = new Date();
+      expirationDate.setTime(Date.now() + 3600000);
+      user.resetPasswordExpires = expirationDate;
+      console.log("PRIMERO ACA", user.resetPasswordToken);
+      console.log("SEGUNDO ACA", user.resetPasswordExpires)
       await user.save();
       const mailOptions = emailTemplates.forgotPassword(userToJson, resetToken);
       await transporter.sendMail(mailOptions);
@@ -160,52 +166,54 @@ const userController = {
     }
   },
 
-  // mailResetPassword: async (req: Request, res: Response): Promise<Response> => {
-  //   const { token, newPassword } = req.body;
-  //   if (!token) {
-  //     return res.status(400).json({ message: "Se requiere un token." });
-  //   }
-  //   if (!newPassword) {
-  //     return res
-  //       .status(400)
-  //       .json({ message: "Se requiere ingresar una nueva contraseña." });
-  //   }
-  //   if (!validate.password(newPassword)) {
-  //     return res.status(400).json({
-  //       message:
-  //         "La nueva contraseña no cumple con los requisitos mínimos:\n" +
-  //         "✓ Solo letras y números.\n" +
-  //         "✓ 1 letra mayúscula.\n" +
-  //         "✓ 1 letra minúscula.\n" +
-  //         "✓ 1 número.\n" +
-  //         "✓ 8 caracteres de largo.",
-  //     });
-  //   }
-  //   try {
-  //     const user = await User.findOne({
-  //       where: {
-  //         resetPasswordToken: token,
-  //       },
-  //     });
-  //     if (!user) {
-  //       return res.status(400).json({ message: "Token inválido o expirado." });
-  //     }
-  //     const hashedPassword = await user.hash(
-  //       newPassword,
-  //       user.getDataValue("salt")
-  //     );
-  //     user.password = hashedPassword;
-  //     user.resetPasswordToken = null;
-  //     await user.save();
-  //     const confirmMailOptions = emailTemplates.resetPasswordConfirmation(user);
-  //     await transporter.sendMail(confirmMailOptions);
-  //     res.json({ message: "Contraseña actualizada con éxito." });
-  //   } catch (error) {
-  //     console.error(error);
-  //     res.status(500).json(error);
-  //   }
-  // },
-
+  mailResetPassword: async (req: Request, res: Response): Promise<Response> => {
+    const { token, newPassword } = req.body;
+    if (!token) {
+      return res.status(400).json({ message: "Se requiere un token." });
+    }
+    if (!newPassword) {
+      return res
+        .status(400)
+        .json({ message: "Se requiere ingresar una nueva contraseña." });
+    }
+    if (!validate.password(newPassword)) {
+      return res.status(400).json({
+        message:
+          "La nueva contraseña no cumple con los requisitos mínimos:\n" +
+          "✓ Solo letras y números.\n" +
+          "✓ 1 letra mayúscula.\n" +
+          "✓ 1 letra minúscula.\n" +
+          "✓ 1 número.\n" +
+          "✓ 8 caracteres de largo.",
+      });
+    }
+    try {
+      const user = await User.findOne({
+        where: {
+          resetPasswordToken: token,
+          resetPasswordExpires: { [Sequelize.Op.gt]: Date.now() },
+        },
+      });
+      if (!user) {
+        console.log("ACAAAAAAA", user);
+        return res.status(400).json({ message: "Token inválido o expirado." });
+      }
+      const hashedPassword = await user.hash(
+        newPassword,
+        user.getDataValue("salt")
+      );
+      user.password = hashedPassword;
+      user.resetPasswordToken = null;
+      user.resetPasswordExpires = null;
+      await user.save();
+      const confirmMailOptions = emailTemplates.resetPasswordConfirmation(user);
+      await transporter.sendMail(confirmMailOptions);
+      res.json({ message: "Contraseña actualizada con éxito." });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json(error);
+    }
+  },
 
   deleteUserById: async (req: Request, res: Response): Promise<Response> => {
     const { id } = req.params;
@@ -393,9 +401,9 @@ const userController = {
     }
   },
 
-  updateState: async (req:CustomRequest,res:Response) =>{
-    try{
-      const { driverId, isDisabled} = req.body;
+  updateState: async (req: CustomRequest, res: Response) => {
+    try {
+      const { driverId, isDisabled } = req.body;
 
       const [updateCount] = await User.update(
         { isDisabled },
@@ -405,7 +413,9 @@ const userController = {
       if (updateCount > 0) {
         return res
           .status(200)
-          .json({ message: "Se actualizó el estado del repartidor correctamente" });
+          .json({
+            message: "Se actualizó el estado del repartidor correctamente",
+          });
       } else {
         return res.status(404).json({
           error: "Usuario no encontrado o el estado no pudo cambiar",
@@ -415,8 +425,7 @@ const userController = {
       console.error("Error al cambiar el estado del repartidor:", error);
       return res.status(500).json({ error: "Error interno del servidor" });
     }
-  }
-
+  },
 };
 
 export default userController;
