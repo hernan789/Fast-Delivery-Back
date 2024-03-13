@@ -57,7 +57,9 @@ const packagesControllers = {
       const { id } = req.params;
       const packageId = parseInt(id);
       if (isNaN(packageId)) {
-        return res.status(400).json({ error: "El ID del paquete no es válido" });
+        return res
+          .status(400)
+          .json({ error: "El ID del paquete no es válido" });
       }
       const packageItem = await Package.findByPk(packageId);
       if (!packageItem)
@@ -167,10 +169,7 @@ const packagesControllers = {
       if (!packageItem)
         return res.status(404).json({ message: "Paquete no encontrado" });
       if (packageItem.status !== "EN CURSO")
-
-        return res
-          .status(400)
-          .json({ message: "El paquete no está en curso" });
+        return res.status(400).json({ message: "El paquete no está en curso" });
       packageItem.status = PackageStatus.DELIVERED;
       await packageItem.save();
       return res
@@ -187,8 +186,8 @@ const packagesControllers = {
       const packageItem = await Package.findByPk(id);
       if (!packageItem)
         return res.status(404).json({ message: "Paquete no encontrado" });
-      if (packageItem.status !== "EN CURSO")
-        return res.status(400).json({ message: "El paquete no está en curso" });
+      //if (packageItem.status !== "EN CURSO")
+      //  return res.status(400).json({ message: "El paquete no está en curso" });
       packageItem.status = PackageStatus.CANCELLED;
       await packageItem.save();
       return res
