@@ -42,7 +42,7 @@ const packagesControllers = {
         include: [
           {
             model: User,
-            attributes: ["id", "name", "email", "isDisabled"],
+            attributes: ["id", "name", "email", "isDisabled", "profileImage"],
           },
         ],
       });
