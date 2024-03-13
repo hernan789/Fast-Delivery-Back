@@ -85,7 +85,10 @@ const userController = {
         isAdmin: existingUserToJson.isAdmin,
       });
       res.cookie("token", token, { httpOnly: true });
-      return res.status(200).json({ message: "Usuario logeado con éxito." });
+      return res.status(200).json({
+        message: "Usuario logeado con éxito.",
+        isAdmin: existingUserToJson.isAdmin,
+      });
     } catch (err) {
       console.error(err);
       return res.status(500).json({ error: "Error interno del servidor." });
