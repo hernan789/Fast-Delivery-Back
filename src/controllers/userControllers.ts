@@ -18,8 +18,14 @@ interface CustomRequest extends Request {
 const userController = {
   register: async (req: Request, res: Response): Promise<Response> => {
     try {
-      const { name, surname, email, password, isAdmin }: CreateUserRequestBody =
-        req.body;
+      const {
+        name,
+        surname,
+        email,
+        password,
+        isAdmin,
+        profileImage,
+      }: CreateUserRequestBody = req.body;
 
       if (!validate.email(email)) {
         return res
@@ -39,6 +45,7 @@ const userController = {
         email,
         password,
         isAdmin,
+        profileImage,
       });
       const userResponse = { ...newUser.toJSON(), password: undefined };
       const mailOptions = emailTemplates.welcome(userResponse);
@@ -152,7 +159,7 @@ const userController = {
       expirationDate.setTime(Date.now() + 3600000);
       user.resetPasswordExpires = expirationDate;
       console.log("PRIMERO ACA", user.resetPasswordToken);
-      console.log("SEGUNDO ACA", user.resetPasswordExpires)
+      console.log("SEGUNDO ACA", user.resetPasswordExpires);
       await user.save();
       const mailOptions = emailTemplates.forgotPassword(userToJson, resetToken);
       await transporter.sendMail(mailOptions);
@@ -411,11 +418,9 @@ const userController = {
       );
 
       if (updateCount > 0) {
-        return res
-          .status(200)
-          .json({
-            message: "Se actualizó el estado del repartidor correctamente",
-          });
+        return res.status(200).json({
+          message: "Se actualizó el estado del repartidor correctamente",
+        });
       } else {
         return res.status(404).json({
           error: "Usuario no encontrado o el estado no pudo cambiar",
