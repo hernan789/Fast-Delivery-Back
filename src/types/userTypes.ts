@@ -4,6 +4,7 @@ export interface CreateUserRequestBody {
   email: string;
   password: string;
   isAdmin: boolean;
+  profileImage: string;
 }
 
 export interface LoginRequestBody {
@@ -11,9 +12,7 @@ export interface LoginRequestBody {
   password: string;
 }
 
-
 export interface Payload {
-  id: number
+  id: number;
   isAdmin: boolean;
 }
-
