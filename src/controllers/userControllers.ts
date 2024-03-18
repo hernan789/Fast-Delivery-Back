@@ -434,7 +434,7 @@ const userController = {
       return res.status(500).json({ error: "Error interno del servidor" });
     }
   },
-  //TODO:
+
   deliveryStats: async (req: CustomRequest, res: Response) => {
     try {
       const { date } = req.body; // Suponiendo que la fecha se envía en el cuerpo de la solicitud
