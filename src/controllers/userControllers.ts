@@ -18,8 +18,14 @@ interface CustomRequest extends Request {
 const userController = {
   register: async (req: Request, res: Response): Promise<Response> => {
     try {
-      const { name, surname, email, password, isAdmin }: CreateUserRequestBody =
-        req.body;
+      const {
+        name,
+        surname,
+        email,
+        password,
+        isAdmin,
+        profileImage,
+      }: CreateUserRequestBody = req.body;
 
       if (!validate.email(email)) {
         return res
@@ -39,6 +45,7 @@ const userController = {
         email,
         password,
         isAdmin,
+        profileImage,
       });
       const userResponse = { ...newUser.toJSON(), password: undefined };
       const mailOptions = emailTemplates.welcome(userResponse);
@@ -78,7 +85,10 @@ const userController = {
         isAdmin: existingUserToJson.isAdmin,
       });
       res.cookie("token", token, { httpOnly: true });
-      return res.status(200).json({ message: "Usuario logeado con éxito." });
+      return res.status(200).json({
+        message: "Usuario logeado con éxito.",
+        isAdmin: existingUserToJson.isAdmin,
+      });
     } catch (err) {
       console.error(err);
       return res.status(500).json({ error: "Error interno del servidor." });
