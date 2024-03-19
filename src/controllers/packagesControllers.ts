@@ -4,6 +4,8 @@ import validate from "../utils/validations";
 import { PackageData } from "../types/packagesTypes.ts";
 import User from "../models/User.ts";
 import { PackageStatus } from "../models/Package.ts";
+import Sequelize from "sequelize";
+
 interface CustomRequest extends Request {
   user?: {
     id: number;
@@ -196,6 +198,31 @@ const packagesControllers = {
     } catch (error) {
       console.error("Error al actualizar el estado del paquete:", error);
       return res.status(500).json({ error: "Error interno del servidor" });
+    }
+  },
+  packagesStats: async (req: CustomRequest, res: Response) => {
+    const { date } = req.body;
+    try {
+      const formattedDate = new Date(date);
+      const createdPackagesPromise = Package.findAll({
+        where: {
+          [Sequelize.Op.and]: [
+            Sequelize.where(
+              Sequelize.fn("date", Sequelize.col("createdAt")),
+              "=",
+              formattedDate
+            ),
+          ],
+        },
+      });
+
+      const createdPackages = await Promise.race([createdPackagesPromise]);
+      res.json(createdPackages);
+    } catch (error) {
+      console.error("Error en packagesStats:", error);
+      res.status(500).json({
+        message: "Ocurrió un error al obtener las estadísticas de paquetes.",
+      });
     }
   },
 };

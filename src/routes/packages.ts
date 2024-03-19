@@ -257,9 +257,21 @@ router.put("/removeUserId/:id", auth, packagesController.removeUserFromPackage);
  *         description: Error interno del servidor
  */
 
-router.put("/updateToOngoing/:id", auth, packagesController.updatePackageStatusToOngoing)//OK// YA APLICADA EN FRONT
-router.put("/updateToDelivered/:id", auth, packagesController.updatePackageStatusToDelivered)//OK// YA APLICADA EN FRONT
-router.put("/updateToCancelled/:id", auth, packagesController.updatePackageStatusToCancelled)//OK// YA APLICADA EN FRONT
+router.put(
+  "/updateToOngoing/:id",
+  auth,
+  packagesController.updatePackageStatusToOngoing
+); //OK// YA APLICADA EN FRONT
+router.put(
+  "/updateToDelivered/:id",
+  auth,
+  packagesController.updatePackageStatusToDelivered
+); //OK// YA APLICADA EN FRONT
+router.put(
+  "/updateToCancelled/:id",
+  auth,
+  packagesController.updatePackageStatusToCancelled
+); //OK// YA APLICADA EN FRONT
 
 router.delete(
   "/:id",
@@ -305,4 +317,11 @@ router.get(
   packagesController.getUserPackagesById
 );
 //pendiente ruta para actualizar estado del paquete desde el admin
+
+router.post(
+  "/stats",
+  /* auth,
+  isAdminMiddleware, */
+  packagesController.packagesStats
+);
 export default router;
