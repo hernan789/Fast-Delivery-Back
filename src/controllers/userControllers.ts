@@ -8,7 +8,7 @@ import { transporter } from "../config/mailTRansporter";
 import emailTemplates from "../utils/emailTemplates.ts";
 import { Payload } from "../types/userTypes";
 import jwt from "jsonwebtoken";
-import Sequelize from "sequelize";
+import Sequelize, { Op } from "sequelize";
 
 interface CustomRequest extends Request {
   user?: {
@@ -432,6 +432,67 @@ const userController = {
     } catch (error) {
       console.error("Error al cambiar el estado del repartidor:", error);
       return res.status(500).json({ error: "Error interno del servidor" });
+    }
+  },
+
+  deliveryStats: async (req: CustomRequest, res: Response) => {
+    try {
+      const { date } = req.body; // Suponiendo que la fecha se envía en el cuerpo de la solicitud
+
+      console.log("Fecha recibida en el cuerpo de la solicitud:", date);
+
+      // Formatear la fecha para asegurarse de que esté en el formato esperado por la base de datos
+      const formattedDate = new Date(date);
+      console.log("Fecha formateada:", formattedDate);
+
+      // Obtener la fecha para el día siguiente
+      const nextDay = new Date(formattedDate);
+      nextDay.setDate(nextDay.getDate() + 1);
+
+      // **Agregar registros para verificar la ejecución de las consultas**
+      console.log("Ejecutando consulta para repartidores totales...");
+      const totalDeliveryUsers = await User.findAll({
+        attributes: ["id", "name", "surname", "email", "createdAt"],
+        where: {
+          isAdmin: false,
+          createdAt: { [Op.lte]: nextDay }, // Se incluye el día especificado
+        },
+      });
+      console.log(
+        "Consulta para repartidores totales finalizada:",
+        totalDeliveryUsers
+      );
+
+      console.log("Ejecutando consulta para repartidores habilitados...");
+      const activeDeliveryUsers = await User.findAll({
+        attributes: ["id", "name", "surname", "email", "createdAt"],
+        where: {
+          isAdmin: false,
+          isDisabled: false,
+          createdAt: { [Op.lte]: nextDay }, // Se incluye el día especificado
+        },
+      });
+      console.log(
+        "Consulta para repartidores habilitados finalizada:",
+        activeDeliveryUsers
+      );
+
+      // Crear un objeto para almacenar los datos organizadamente
+      const deliveryStatsData = {
+        totalDeliveryUsersCount: totalDeliveryUsers.length,
+        activeDeliveryUsersCount: activeDeliveryUsers.length,
+        totalDeliveryUsers: totalDeliveryUsers,
+        activeDeliveryUsers: activeDeliveryUsers,
+      };
+
+      // Enviar la respuesta con los datos obtenidos
+      res.json(deliveryStatsData);
+    } catch (error) {
+      console.error("Error en deliveryStats:", error);
+      res.status(500).json({
+        message:
+          "Ocurrió un error al obtener las estadísticas de repartidores.",
+      });
     }
   },
 };
