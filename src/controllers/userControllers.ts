@@ -381,7 +381,6 @@ const userController = {
   updateUser: async (req: Request, res: Response) => {
     // const userId: string = req.params.id; //PARA CUANDO ESTÉ EL ESTADO REDUX.
     const token = req.cookies.token;
-
     if (!token) {
       return res
         .status(401)
@@ -391,7 +390,7 @@ const userController = {
       const decoded = jwt.verify(token, process.env.JWT_SECRET) as {
         user: Payload;
       };
-      const userId = decoded.user;
+      const userId = decoded.user.id;
 
       const [rowsAffected] = await User.update(
         { isDisabled: true },
