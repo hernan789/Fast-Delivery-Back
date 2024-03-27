@@ -6,7 +6,6 @@ export const users = [
     surname: "Robledo",
     email: "luisrobledo@gmail.com",
     password: "Luis1234",
-    isDisabled: true,
   },
   {
     name: "Hernan",
