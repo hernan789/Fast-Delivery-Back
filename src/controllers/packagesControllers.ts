@@ -39,7 +39,7 @@ const packagesControllers = {
   getAllPackages: async (req: Request, res: Response) => {
     try {
       const packages = await Package.findAll({
-        order: [["createdAt", "DESC"]],
+        order: [["date", "ASC"]],
         limit: 20,
         include: [
           {
