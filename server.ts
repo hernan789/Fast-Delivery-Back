@@ -1,7 +1,8 @@
 import express, { Application, Request, Response, NextFunction } from "express";
-import db from "../fast-Delivery-Back/src/config/index";
+//import db from "../fast-Delivery-Back/src/config/index.ts";
+import db from "./src/config/index"
 import { config } from "dotenv";
-const { Package, User } = require("../fast-Delivery-Back/src/models");
+const { Package, User } = require("./src/models/index");
 const cookieParser = require("cookie-parser");
 //swagger
 const swaggerUI = require("swagger-ui-express");
@@ -31,6 +32,9 @@ app.use(cookieParser());
 app.use(express.json());
 app.use(morgan("dev"));
 app.use(cors({ origin: corsOrigin, credentials: true }));
+app.get("/", (req: Request, res: Response) => {
+  res.send("¡Hola, mundooo!");
+});
 app.use("/api", routes);
 app.use(
   "/v1/api/doc",
