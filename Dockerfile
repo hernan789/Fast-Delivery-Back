@@ -1,21 +1,13 @@
-# Utilizamos una imagen de Node.js más ligera (Alpine)
-FROM node:alpine
+FROM node:20
 
-# Establecemos el directorio de trabajo
-WORKDIR /fast-delivery-back
+WORKDIR /app
 
-# Copiamos los archivos relacionados con el paquete
 COPY package*.json ./
 
-# Instalamos las dependencias de producción (omitiendo las devDependencies)
-RUN npm install --production
+RUN npm install
 
-# Copiamos el resto de los archivos de la aplicación
 COPY . .
 
-# Exponemos el puerto en el que la aplicación corre
 EXPOSE 3001
 
-# Comando para ejecutar la aplicación
 CMD ["npm", "start"]
-

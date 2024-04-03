@@ -6,8 +6,13 @@ const db = new Sequelize(
   process.env.POSTGRES_USER,
   process.env.POSTGRES_PASSWORD,
   {
-    host: "localhost",
+    //host: "host.docker.internal",
+    // host: "192.168.1.33",
+    //host: "172.17.0.1",
+    // host: "127.0.0.1",
+    host: "postgres",
     dialect: "postgres",
+    port: 5432,
     logging: false,
   }
 );
