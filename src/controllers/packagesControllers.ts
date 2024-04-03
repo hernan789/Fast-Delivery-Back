@@ -39,7 +39,7 @@ const packagesControllers = {
   getAllPackages: async (req: Request, res: Response) => {
     try {
       const packages = await Package.findAll({
-        order: [["createdAt", "DESC"]],
+        order: [["date", "ASC"]],
         limit: 20,
         include: [
           {
@@ -106,13 +106,36 @@ const packagesControllers = {
       return res.status(500).json({ error: "Error interno del servidor" });
     }
   },
+  // assignPackage: async (req: CustomRequest, res: Response) => {
+  //   const { id } = req.params;
+  //   const userId = req.user.id;
+  //   try {
+  //     const packageItem = await Package.findByPk(id);
+  //     if (!packageItem)
+  //       return res.status(404).json({ message: "Paquete no encontrado" });
+  //     packageItem.userId = userId;
+  //     await packageItem.save();
+  //     return res.status(200).json({ message: "Paquete asignado exitosamente" });
+  //   } catch (error) {
+  //     console.error("Error al asignar paquete:", error);
+  //     return res.status(500).json({ error: "Error interno del servidor" });
+  //   }
+  // },
   assignPackage: async (req: CustomRequest, res: Response) => {
     const { id } = req.params;
     const userId = req.user.id;
     try {
+      const user = await User.findByPk(userId);
+      if (!user) {
+        return res.status(404).json({ message: "Usuario no encontrado" });
+      }
+      if (user.isDisabled) {
+        return res.status(403).json({ message: "No se permite asignar paquetes a usuarios deshabilitados" });
+      }
       const packageItem = await Package.findByPk(id);
-      if (!packageItem)
+      if (!packageItem) {
         return res.status(404).json({ message: "Paquete no encontrado" });
+      }
       packageItem.userId = userId;
       await packageItem.save();
       return res.status(200).json({ message: "Paquete asignado exitosamente" });
@@ -121,6 +144,7 @@ const packagesControllers = {
       return res.status(500).json({ error: "Error interno del servidor" });
     }
   },
+
   removeUserFromPackage: async (req: CustomRequest, res: Response) => {
     const { id } = req.params;
     try {
