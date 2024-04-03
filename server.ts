@@ -21,7 +21,7 @@ const app: Application = express();
 const routes = require("./src/routes/index").default;
 const morgan = require("morgan");
 const cors = require("cors");
-const corsOrigin = process.env.CORS_ORIGIN || "http://localhost:3000";
+const corsOrigin = process.env.CORS_ORIGIN || "http://localhost";
 const serverPort = process.env.SERVER_PORT || 3001;
 const server = app.listen(serverPort, () =>
   console.log(`Servidor levantado en el puerto ${serverPort}`)
@@ -32,9 +32,6 @@ app.use(cookieParser());
 app.use(express.json());
 app.use(morgan("dev"));
 app.use(cors({ origin: corsOrigin, credentials: true }));
-app.get("/", (req: Request, res: Response) => {
-  res.send("¡Hola, mundooo!");
-});
 app.use("/api", routes);
 app.use(
   "/v1/api/doc",
