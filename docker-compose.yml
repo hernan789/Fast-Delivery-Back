@@ -9,10 +9,6 @@
 #     volumes:
 #       - ./fast-Delivery-Back:/app
 
-
-
-
-
 # version: "3"
 # services:
 #   backend:
@@ -40,8 +36,6 @@
 #       POSTGRES_USER: postgres
 #       POSTGRES_PASSWORD: postgres
 
-
-
 # version: "3"
 # services:
 #   backend:
@@ -54,7 +48,6 @@
 #       - ./fast-Delivery-Back:/app
 #     networks:
 #       - fast-delivery
- 
 
 #   postgres:
 #     image: postgres
@@ -68,11 +61,8 @@
 #       - fast-delivery
 
 # networks:
-#   fast-delivery:  
+#   fast-delivery:
 #     driver: bridge
-
-
-
 
 version: "3"
 services:
@@ -82,7 +72,7 @@ services:
       - "3001:3001"
     volumes:
       # - ./fast-Delivery-Back:/app/fast-delivery-back
-    - ./:/app
+      - ./:/app
     networks:
       - fast-delivery
     depends_on:
@@ -95,10 +85,10 @@ services:
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: fdeliverydb
     ports:
-      - "5432:5432"
+      - "5433:5432"
     networks:
       - fast-delivery
 
 networks:
-  fast-delivery:  
+  fast-delivery:
     driver: bridge
